@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSelector } from 'react-redux';
 
 type ProfileScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Profile'>;
@@ -10,6 +11,8 @@ type ProfileScreenProps = {
 const ProfileScreen: React.FC<ProfileScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
+  const { value } = useSelector((state: any) => state.auth);
+  const [localVal, setLocalVal] = React.useState('');
   const goToHome = (): void => {
     navigation.navigate('Home');
   };
@@ -18,16 +21,14 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
     navigation.navigate('Login');
   };
 
-  // const showAlert = () => {
-  //   Alert.alert('Title', 'This is the alert message.', [
-  //     { text: 'Cancel', style: 'cancel' },
-  //     { text: 'OK', onPress: onClick },
-  //   ]);
-  // };
+  useEffect(() => {
+    setLocalVal(value);
+  }, [value]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Profile Screen</Text>
+      <Text>This is the text: {localVal}</Text>
       <TouchableOpacity style={styles.btn} onPress={goToHome}>
         <Text>Home</Text>
       </TouchableOpacity>

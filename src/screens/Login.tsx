@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useSelector } from 'react-redux';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -10,6 +11,8 @@ type LoginScreenProps = {
 const LoginScreen: React.FC<LoginScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
+  const { value } = useSelector((state: any) => state.auth);
+  const [localVal, setLocalVal] = React.useState('');
   const goToProfile = (): void => {
     navigation.navigate('Profile');
   };
@@ -17,16 +20,15 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
   const goToHome = (): void => {
     navigation.navigate('Home');
   };
-  // const showAlert = () => {
-  //   Alert.alert('Title', 'This is the alert message.', [
-  //     { text: 'Cancel', style: 'cancel' },
-  //     { text: 'OK', onPress: onClick },
-  //   ]);
-  // };
+
+  useEffect(() => {
+    setLocalVal(value);
+  }, [value]);
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Login Screen</Text>
+      <Text style={styles.text1}>This is the text: {localVal}</Text>
       <TouchableOpacity style={styles.btn} onPress={goToProfile}>
         <Text>Profile</Text>
       </TouchableOpacity>
@@ -45,6 +47,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 30,
+  },
+  text1: {
+    fontSize: 20,
   },
   btn: {
     backgroundColor: '#00ff00',
