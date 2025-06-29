@@ -1,0 +1,62 @@
+1. creat new app ref (https://reactnative.dev/docs/getting-started-without-a-framework)
+npx @react-native-community/cli@latest init AppName
+2.1 (terminal1)
+npm start
+2.2 (terminal2)
+npm run android
+    or
+2. 
+npx react-native run-android
+
+3. to show console.log()
+npx react-native log-android
+
+4. for navigation
+npm install @react-navigation/native @react-navigation/native-stack
+npm install react-native-screens react-native-safe-area-context
+
+5. to clear android cache
+./gradlew clean
+
+6. to add icons in any react native cli(will need to re-run the app)
+6.1 install package
+npm install react-native-vector-icons
+6.2 In android/app/build.gradle, add this inside apply from: "../../node_modules/react-native-vector-icons/fonts.gradle" at the bottom:
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+6.3 the use like below
+import Icon from 'react-native-vector-icons/MaterialIcons';
+<Icon name="home" size={30} color="#000" />
+
+7. Change the App Display Name (what shows on the phone)
+7.1 open below file
+android/app/src/main/res/values/strings.xml
+7.2 change app name
+<string name="app_name">Your New App Name</string>
+or more advance way
+7.1
+npx react-native-rename "Zxpense" -b com.newname.app
+7.3 rebuild app
+# Clean and rebuild Android
+cd android && ./gradlew clean && cd ..
+npx react-native run-android
+# Rebuild iOS
+cd ios && pod install && cd ..
+npx react-native run-ios
+
+8. if failed to bundle then follow below 
+rm -rf android/.gradle
+rm -rf android/app/build
+rm -rf node_modules
+rm -rf ios/build
+rm -rf android/build
+npm install
+
+9. to release
+9.1 debug mode apk, apk will be generated in android/app/build/outputs/apk/debug/app-debug.apk
+cd android
+./gradlew assembleDebug   # On macOS/Linux
+gradlew assembleDebug     # On Windows
+adb install android/app/build/outputs/apk/debug/app-debug.apk
+9.2 release mode apk, apk will be generated in android/app/build/outputs/apk/release/app-release.apk
+cd android
+./gradlew assembleRelease
