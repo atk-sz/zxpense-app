@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { RootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
+import ScreenView from '../utils/ScreenView';
 
 type LoginScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -26,7 +27,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
   }, [value]);
 
   return (
-    <View style={styles.container}>
+    <ScreenView>
       <Text style={styles.text}>Login Screen</Text>
       <Text style={styles.text1}>This is the text: {localVal}</Text>
       <TouchableOpacity style={styles.btn} onPress={goToProfile}>
@@ -35,7 +36,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({
       <TouchableOpacity style={styles.btn} onPress={goToHome}>
         <Text>Home</Text>
       </TouchableOpacity>
-    </View>
+    </ScreenView>
   );
 };
 

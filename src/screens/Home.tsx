@@ -10,6 +10,7 @@ import { RootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch } from 'react-redux';
 import { setValue, resetValue } from '../redux/slices/auth';
+import ScreenView from '../utils/ScreenView';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -39,7 +40,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <ScreenView>
       <Text style={styles.text}>Home Screen</Text>
       <View style={styles.container1}>
         <TextInput
@@ -61,7 +62,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       <TouchableOpacity style={styles.btn} onPress={goToLogin}>
         <Text>Login</Text>
       </TouchableOpacity>
-    </View>
+    </ScreenView>
   );
 };
 

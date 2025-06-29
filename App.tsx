@@ -1,19 +1,38 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen, LoginScreen, ProfileScreen } from './src/screens';
+import {
+  HomeScreen,
+  LoginScreen,
+  PreScreen,
+  ProfileScreen,
+} from './src/screens';
+import { StatusBar } from 'react-native';
 
 function App() {
   // const isDarkMode = useColorScheme() === 'dark';
   const Stack = createNativeStackNavigator();
 
+  const isUser = false;
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content" // or 'light-content' for white text
+      />
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{ headerShown: false }}
+          initialRouteName={isUser ? 'Home' : 'PreScreen'}
+        >
+          <Stack.Screen name="PreScreen" component={PreScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
 
