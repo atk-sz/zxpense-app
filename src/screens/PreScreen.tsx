@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import { RootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import ScreenView from '../utils/ScreenView';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { DarkTheme } from '../utils/theme';
+import { ScreenView, ToastMessage } from '../components';
 
 type PreScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PreScreen'>;
@@ -19,21 +19,33 @@ type PreScreenProps = {
 const PreScreen: React.FC<PreScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
-  const [name, setName] = React.useState({
+  const [name, setName] = useState({
     firstName: '',
     lastName: '',
   });
+  const [toast, setToast] = useState(false);
 
   const goToHome = (): void => {
+    if (name.firstName.length < 3) {
+      setToast(true);
+      return;
+    }
     navigation.navigate('Home');
   };
 
   return (
     <ScreenView>
+      {toast && (
+        <ToastMessage
+          message={'First name should be at least 3 characters long'}
+          type={'error'}
+          onHide={() => setToast(false)}
+        />
+      )}
       <View style={styles.screenContainer}>
         <View style={styles.titleContainer}>
           <Icon name="diversity-2" size={30} color="#fff" />
-          <Text style={styles.titleText}>TripExpenz</Text>
+          <Text style={styles.titleText}>Zxpense</Text>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>First Name</Text>
@@ -84,6 +96,7 @@ const styles = StyleSheet.create({
     color: DarkTheme.text,
   },
   input: {
+    color: DarkTheme.text,
     backgroundColor: DarkTheme.dark,
     borderWidth: 2,
     borderColor: DarkTheme.grey,

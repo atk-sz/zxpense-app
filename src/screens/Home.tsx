@@ -10,7 +10,7 @@ import { RootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch } from 'react-redux';
 import { setValue, resetValue } from '../redux/slices/auth';
-import ScreenView from '../utils/ScreenView';
+import { ScreenView } from '../components';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
