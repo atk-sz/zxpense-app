@@ -4,19 +4,28 @@ type Theme = {
   text: string;
   dark: string;
   grey: string;
+  info: string;
+  error: string;
+  success: string;
 };
 export const DarkTheme: Theme = {
-  primary: '#161616',
-  secondary: '#E52E2D',
-  text: '#ffffff',
-  dark: '#121212',
-  grey: '#383838',
+  primary: '#161616', // this is dark black
+  secondary: '#427CC3', // this is light blue
+  text: '#ffffff', // this is white
+  dark: '#121212', // this is dark black
+  grey: '#383838', // this is dark grey
+  error: '#E52E2D', // this is red
+  info: '#427CC3', // this is light blue
+  success: '#4BB543', // this is green
 };
 
 export const LightTheme: Theme = {
-  primary: '#E52E2D',
-  secondary: '#161616',
-  text: '#ffffff',
-  dark: '#121212',
-  grey: '#383838',
+  primary: '#E52E2D', // this is red
+  secondary: '#161616', // this is dark black
+  text: '#ffffff', // this is white
+  dark: '#121212', // this is dark black
+  grey: '#383838', // this is dark grey
+  info: '#427CC3', // this is light blue
+  error: '#E52E2D', // this is red
+  success: '#4BB543', // this is green
 };

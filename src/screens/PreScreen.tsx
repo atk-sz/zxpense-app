@@ -10,7 +10,8 @@ import { RootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { DarkTheme } from '../utils/theme';
-import { ScreenView, ToastMessage } from '../components';
+import { ScreenView } from '../components';
+import { useToast } from '../contexts/ToastContext';
 
 type PreScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PreScreen'>;
@@ -19,15 +20,15 @@ type PreScreenProps = {
 const PreScreen: React.FC<PreScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
+  const { showToast } = useToast();
   const [name, setName] = useState({
     firstName: '',
     lastName: '',
   });
-  const [toast, setToast] = useState(false);
 
   const goToHome = (): void => {
     if (name.firstName.length < 3) {
-      setToast(true);
+      showToast('First name must be at least 3 characters long.', 'error');
       return;
     }
     navigation.navigate('Home');
@@ -35,13 +36,6 @@ const PreScreen: React.FC<PreScreenProps> = ({
 
   return (
     <ScreenView>
-      {toast && (
-        <ToastMessage
-          message={'First name should be at least 3 characters long'}
-          type={'error'}
-          onHide={() => setToast(false)}
-        />
-      )}
       <View style={styles.screenContainer}>
         <View style={styles.titleContainer}>
           <Icon name="diversity-2" size={30} color="#fff" />
