@@ -1,17 +1,7 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  ReactNode,
-} from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 import { ToastComponent } from '../components';
-
-type ToastType = 'success' | 'error' | 'info';
-
-interface ToastContextType {
-  showToast: (message: string, type?: ToastType) => void;
-}
+import { ToastContextType } from '../utils/interfaces';
+import useToastHandler from '../hooks/useToast.hook';
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
@@ -26,18 +16,7 @@ interface ToastProviderProps {
 }
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
-  const [visible, setVisible] = useState(false);
-  const [message, setMessage] = useState('');
-  const [type, setType] = useState<ToastType>('info');
-
-  const showToast = useCallback((msg: string, t: ToastType = 'info') => {
-    setMessage(msg);
-    setType(t);
-    setVisible(true);
-
-    // auto-hide after 3 seconds
-    setTimeout(() => setVisible(false), 3000);
-  }, []);
+  const { visible, message, type, showToast } = useToastHandler();
 
   return (
     <ToastContext.Provider value={{ showToast }}>

@@ -7,6 +7,12 @@ export type RootStackParamList = {
   PreScreen: undefined;
 };
 
+export type ToastType = 'success' | 'error' | 'info';
+
+export interface ToastContextType {
+  showToast: (message: string, type?: ToastType) => void;
+}
+
 // below code is useless for now
 export type RootStackScreenProps<T extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, T>;

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Text, StyleSheet, Dimensions, Animated } from 'react-native';
-import { DarkTheme } from '../utils/theme';
+import { DarkTheme } from '../../utils/theme';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -9,7 +9,7 @@ interface ToastProps {
   type: 'success' | 'error' | 'info';
 }
 
-const ToastComponent: React.FC<ToastProps> = ({ message, type }) => {
+const Toast: React.FC<ToastProps> = ({ message, type }) => {
   const opacityAnim = useRef(new Animated.Value(0)).current;
   const translateYAnim = useRef(new Animated.Value(30)).current;
 
@@ -90,4 +90,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ToastComponent;
+export default Toast;
