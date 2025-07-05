@@ -3,6 +3,7 @@ import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../utils/interfaces';
+import { DarkTheme } from '../../utils/theme';
 
 type LoaderComponentProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Loader'>;
@@ -42,11 +43,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: DarkTheme.primary,
   },
   text: {
     marginTop: 15,
     fontSize: 16,
-    color: '#555',
+    color: DarkTheme.text,
   },
 });
