@@ -1,67 +1,17 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { RootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useDispatch } from 'react-redux';
-import { setValue, resetValue } from '../redux/slices/auth';
 import { ScreenView } from '../components';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
 };
 
-const HomeScreen: React.FC<HomeScreenProps> = ({
-  navigation,
-}): React.JSX.Element => {
-  const dispatch = useDispatch();
-  const [localVal, setLocalVal] = React.useState('');
-  const goToLogin = (): void => {
-    navigation.navigate('Login');
-  };
-
-  const goToProfile = (): void => {
-    navigation.navigate('Profile');
-  };
-
-  const updateValue = (): void => {
-    dispatch(setValue(localVal));
-    setLocalVal('');
-  };
-
-  const clearValue = (): void => {
-    dispatch(resetValue());
-    setLocalVal('');
-  };
-
+const HomeScreen: React.FC<HomeScreenProps> = (): React.JSX.Element => {
   return (
     <ScreenView>
       <Text style={styles.text}>Home Screen</Text>
-      <View style={styles.container1}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Enter Value"
-          value={localVal}
-          onChangeText={setLocalVal}
-        />
-        <TouchableOpacity style={styles.btn} onPress={updateValue}>
-          <Text>Update Value</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={clearValue}>
-          <Text>Clear Value</Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.btn} onPress={goToProfile}>
-        <Text>Profile</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.btn} onPress={goToLogin}>
-        <Text>Login</Text>
-      </TouchableOpacity>
     </ScreenView>
   );
 };

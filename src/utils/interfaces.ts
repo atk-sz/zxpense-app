@@ -1,11 +1,12 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
+  Loader: undefined;
+  PreScreen: undefined;
+  Dev: undefined;
   Home: undefined;
   Profile: undefined;
   Login: undefined;
-  PreScreen: undefined;
-  Loader: undefined;
 };
 
 export type ToastType = 'success' | 'error' | 'info';

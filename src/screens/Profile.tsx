@@ -14,12 +14,17 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
 }): React.JSX.Element => {
   const { value } = useSelector((state: any) => state.auth);
   const [localVal, setLocalVal] = React.useState('');
+
   const goToHome = (): void => {
     navigation.navigate('Home');
   };
 
   const goToLogin = (): void => {
     navigation.navigate('Login');
+  };
+
+  const goToDev = (): void => {
+    navigation.navigate('Dev');
   };
 
   useEffect(() => {
@@ -35,6 +40,9 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
       </TouchableOpacity>
       <TouchableOpacity style={styles.btn} onPress={goToLogin}>
         <Text>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.btn} onPress={goToDev}>
+        <Text>Dev</Text>
       </TouchableOpacity>
     </ScreenView>
   );
