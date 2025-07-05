@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { RootStackParamList } from '../utils/interfaces';
+import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { DarkTheme } from '../utils/theme';
@@ -15,7 +15,7 @@ import { useToast } from '../contexts/ToastContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type PreScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'PreScreen'>;
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'PreScreen'>;
 };
 
 const PreScreen: React.FC<PreScreenProps> = ({

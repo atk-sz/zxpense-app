@@ -6,14 +6,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { RootStackParamList } from '../utils/interfaces';
+import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDispatch } from 'react-redux';
 import { setValue, resetValue } from '../redux/slices/auth';
 import { ScreenView } from '../components';
 
 type DevScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Dev'>;
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'Dev'>;
 };
 
 const DevScreen: React.FC<DevScreenProps> = ({

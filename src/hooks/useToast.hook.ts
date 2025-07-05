@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react';
-import { ToastType } from '../utils/interfaces';
+import { IToastType } from '../utils/interfaces';
 
 const useToastHandler = () => {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState('');
-  const [type, setType] = useState<ToastType>('info');
+  const [type, setType] = useState<IToastType>('info');
 
-  const showToast = useCallback((msg: string, t: ToastType = 'info') => {
+  const showToast = useCallback((msg: string, t: IToastType = 'info') => {
     setMessage(msg);
     setType(t);
     setVisible(true);

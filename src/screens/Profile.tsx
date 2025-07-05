@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { RootStackParamList } from '../utils/interfaces';
+import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 import { ScreenView } from '../components';
 
 type ProfileScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Profile'>;
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'Profile'>;
 };
 
 const ProfileScreen: React.FC<ProfileScreenProps> = ({

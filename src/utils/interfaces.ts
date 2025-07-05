@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export type RootStackParamList = {
+export type IRootStackParamList = {
   Loader: undefined;
   PreScreen: undefined;
   Dev: undefined;
@@ -9,12 +9,18 @@ export type RootStackParamList = {
   Login: undefined;
 };
 
-export type ToastType = 'success' | 'error' | 'info';
+export type IToastType = 'success' | 'error' | 'info';
 
-export interface ToastContextType {
-  showToast: (message: string, type?: ToastType) => void;
+export interface IToastContextType {
+  showToast: (message: string, type?: IToastType) => void;
 }
 
+export type IEventExpense = {
+  id: string;
+  eventTitle: string;
+  eventDate: string;
+};
+
 // below code is useless for now
-export type RootStackScreenProps<T extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, T>;
+export type RootStackScreenProps<T extends keyof IRootStackParamList> =
+  NativeStackScreenProps<IRootStackParamList, T>;

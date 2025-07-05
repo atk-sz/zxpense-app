@@ -3,11 +3,11 @@ import React, { useEffect } from 'react';
 import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../utils/interfaces';
+import { IRootStackParamList } from '../../utils/interfaces';
 import { DarkTheme } from '../../utils/theme';
 
 type LoaderComponentProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Loader'>;
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'Loader'>;
 };
 
 const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {

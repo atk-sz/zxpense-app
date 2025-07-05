@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { RootStackParamList } from '../utils/interfaces';
+import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 import { ScreenView } from '../components';
 
 type LoginScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'Login'>;
 };
 
 const LoginScreen: React.FC<LoginScreenProps> = ({

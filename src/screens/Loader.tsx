@@ -1,10 +1,10 @@
 import React from 'react';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../utils/interfaces';
+import { IRootStackParamList } from '../utils/interfaces';
 import { LoaderComponent, ScreenView } from '../components';
 
 type LoaderScreenProps = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Loader'>;
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'Loader'>;
 };
 
 const LoaderScreen: React.FC<LoaderScreenProps> = ({ navigation }) => {

@@ -1,11 +1,11 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { ToastComponent } from '../components';
-import { ToastContextType } from '../utils/interfaces';
+import { IToastContextType } from '../utils/interfaces';
 import useToastHandler from '../hooks/useToast.hook';
 
-const ToastContext = createContext<ToastContextType | undefined>(undefined);
+const ToastContext = createContext<IToastContextType | undefined>(undefined);
 
-export const useToast = (): ToastContextType => {
+export const useToast = (): IToastContextType => {
   const context = useContext(ToastContext);
   if (!context) throw new Error('useToast must be used within a ToastProvider');
   return context;
