@@ -16,7 +16,8 @@ npm install @react-navigation/native @react-navigation/native-stack
 npm install react-native-screens react-native-safe-area-context
 
 5. to clear android cache
-./gradlew clean
+cd android
+./gradlew clean or gradlew clean
 
 6. to add icons in any react native cli(will need to re-run the app)
 6.1 install package

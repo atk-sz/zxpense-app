@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { DarkTheme } from '../utils/theme';
 import { ScreenView } from '../components';
 import { useToast } from '../contexts/ToastContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type PreScreenProps = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'PreScreen'>;
@@ -26,13 +27,28 @@ const PreScreen: React.FC<PreScreenProps> = ({
     lastName: '',
   });
 
-  const goToHome = (): void => {
+  const goToHome = async (): Promise<void> => {
     if (name.firstName.length < 3) {
       showToast('First name must be at least 3 characters long.', 'error');
       return;
     }
+    await AsyncStorage.setItem(
+      'fullName',
+      `${name.firstName} ${name.lastName}`,
+    );
     navigation.navigate('Home');
   };
+
+  useEffect(() => {
+    const checkFullName = async (): Promise<void> => {
+      const fullName = await AsyncStorage.getItem('fullName');
+      console.log('fullName', fullName);
+      if (fullName) {
+        navigation.navigate('Home');
+      }
+    };
+    checkFullName();
+  }, [navigation]);
 
   return (
     <ScreenView>
