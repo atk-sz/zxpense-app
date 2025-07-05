@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type IRootStackParamList = {
-  Loader: undefined;
+  InitLoad: undefined;
   PreScreen: undefined;
   Dev: undefined;
   Home: undefined;

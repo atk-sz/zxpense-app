@@ -1,4 +1,4 @@
-export { default as LoaderScreen } from './Loader';
+export { default as InitLoadScreen } from './InitLoad';
 export { default as PreScreen } from './PreScreen';
 export { default as DevScreen } from './Dev';
 export { default as HomeScreen } from './Home';

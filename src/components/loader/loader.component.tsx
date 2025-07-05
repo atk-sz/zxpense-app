@@ -7,7 +7,7 @@ import { IRootStackParamList } from '../../utils/interfaces';
 import { DarkTheme } from '../../utils/theme';
 
 type LoaderComponentProps = {
-  navigation: NativeStackNavigationProp<IRootStackParamList, 'Loader'>;
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'InitLoad'>;
 };
 
 const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {

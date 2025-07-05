@@ -1,16 +1,9 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useDispatch } from 'react-redux';
-import { setValue, resetValue } from '../redux/slices/auth';
 import { ScreenView } from '../components';
+import { useLoader } from '../contexts/LoaderContext';
 
 type DevScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Dev'>;
@@ -19,8 +12,14 @@ type DevScreenProps = {
 const DevScreen: React.FC<DevScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
-  const dispatch = useDispatch();
-  const [localVal, setLocalVal] = React.useState('');
+  const { showLoader, hideLoader } = useLoader();
+
+  const showLoaderFn = (): void => {
+    showLoader('Brrr...');
+    setTimeout(() => {
+      hideLoader();
+    }, 3000);
+  };
 
   const goToHome = (): void => {
     navigation.navigate('Home');
@@ -34,31 +33,12 @@ const DevScreen: React.FC<DevScreenProps> = ({
     navigation.navigate('Profile');
   };
 
-  const updateValue = (): void => {
-    dispatch(setValue(localVal));
-    setLocalVal('');
-  };
-
-  const clearValue = (): void => {
-    dispatch(resetValue());
-    setLocalVal('');
-  };
-
   return (
     <ScreenView>
       <Text style={styles.text}>Dev Screen</Text>
       <View style={styles.container1}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Enter Value"
-          value={localVal}
-          onChangeText={setLocalVal}
-        />
-        <TouchableOpacity style={styles.btn} onPress={updateValue}>
-          <Text>Update Value</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={clearValue}>
-          <Text>Clear Value</Text>
+        <TouchableOpacity style={styles.btn} onPress={showLoaderFn}>
+          <Text>Show Loading</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.btn} onPress={goToHome}>

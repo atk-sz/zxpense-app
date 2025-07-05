@@ -4,10 +4,10 @@ import { IRootStackParamList } from '../utils/interfaces';
 import { LoaderComponent, ScreenView } from '../components';
 
 type LoaderScreenProps = {
-  navigation: NativeStackNavigationProp<IRootStackParamList, 'Loader'>;
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'InitLoad'>;
 };
 
-const LoaderScreen: React.FC<LoaderScreenProps> = ({ navigation }) => {
+const InitLoadScreen: React.FC<LoaderScreenProps> = ({ navigation }) => {
   return (
     <ScreenView>
       <LoaderComponent navigation={navigation} />
@@ -15,4 +15,4 @@ const LoaderScreen: React.FC<LoaderScreenProps> = ({ navigation }) => {
   );
 };
 
-export default LoaderScreen;
+export default InitLoadScreen;

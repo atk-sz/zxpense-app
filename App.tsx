@@ -3,20 +3,22 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   DevScreen,
   HomeScreen,
-  LoaderScreen,
+  InitLoadScreen,
   LoginScreen,
   PreScreen,
   ProfileScreen,
 } from './src/screens';
 import { StatusBar } from 'react-native';
 import { ToastProvider } from './src/contexts/ToastContext';
+import { LoaderProvider } from './src/contexts/LoaderContext';
+import { LoadingComponent } from './src/components';
 
 function App() {
   // const isDarkMode = useColorScheme() === 'dark';
   const Stack = createNativeStackNavigator();
 
   return (
-    <>
+    <LoaderProvider>
       <StatusBar
         translucent
         backgroundColor="transparent"
@@ -26,9 +28,9 @@ function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName={'Loader'}
+            initialRouteName={'InitLoad'}
           >
-            <Stack.Screen name="Loader" component={LoaderScreen} />
+            <Stack.Screen name="InitLoad" component={InitLoadScreen} />
             <Stack.Screen name="PreScreen" component={PreScreen} />
             <Stack.Screen name="Dev" component={DevScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
@@ -37,7 +39,8 @@ function App() {
           </Stack.Navigator>
         </NavigationContainer>
       </ToastProvider>
-    </>
+      <LoadingComponent />
+    </LoaderProvider>
   );
 }
 
