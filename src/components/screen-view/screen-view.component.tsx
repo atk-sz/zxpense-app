@@ -6,8 +6,13 @@ import {
   StyleSheet,
 } from 'react-native';
 import { DarkTheme } from '../../utils/theme';
+import { ReactNode } from 'react';
 
-const ScreenView = ({ children }: any) => {
+type ScreenViewProps = {
+  children: ReactNode;
+};
+
+const ScreenView: React.FC<ScreenViewProps> = ({ children }) => {
   const topPadding =
     Platform.OS === 'android' ? StatusBar.currentHeight ?? 0 : 0;
   const { width } = Dimensions.get('window');

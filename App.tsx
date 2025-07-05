@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   HomeScreen,
+  LoaderScreen,
   LoginScreen,
   PreScreen,
   ProfileScreen,
@@ -12,8 +13,6 @@ import { ToastProvider } from './src/contexts/ToastContext';
 function App() {
   // const isDarkMode = useColorScheme() === 'dark';
   const Stack = createNativeStackNavigator();
-
-  const isUser = false;
 
   return (
     <>
@@ -26,8 +25,9 @@ function App() {
         <NavigationContainer>
           <Stack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName={isUser ? 'Home' : 'PreScreen'}
+            initialRouteName={'Loader'}
           >
+            <Stack.Screen name="Loader" component={LoaderScreen} />
             <Stack.Screen name="PreScreen" component={PreScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />

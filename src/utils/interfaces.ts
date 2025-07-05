@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Login: undefined;
   PreScreen: undefined;
+  Loader: undefined;
 };
 
 export type ToastType = 'success' | 'error' | 'info';

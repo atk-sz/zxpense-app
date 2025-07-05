@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -38,17 +38,6 @@ const PreScreen: React.FC<PreScreenProps> = ({
     );
     navigation.navigate('Home');
   };
-
-  useEffect(() => {
-    const checkFullName = async (): Promise<void> => {
-      const fullName = await AsyncStorage.getItem('fullName');
-      console.log('fullName', fullName);
-      if (fullName) {
-        navigation.navigate('Home');
-      }
-    };
-    checkFullName();
-  }, [navigation]);
 
   return (
     <ScreenView>
