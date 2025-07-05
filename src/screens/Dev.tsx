@@ -4,6 +4,7 @@ import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenView } from '../components';
 import { useLoader } from '../contexts/LoaderContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type DevScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Dev'>;
@@ -19,6 +20,16 @@ const DevScreen: React.FC<DevScreenProps> = ({
     setTimeout(() => {
       hideLoader();
     }, 3000);
+  };
+
+  const removeData = async () => {
+    try {
+      await AsyncStorage.removeItem('firstName');
+      await AsyncStorage.removeItem('lastName');
+      navigation.replace('PreScreen');
+    } catch (error) {
+      console.error('Error removing data:', error);
+    }
   };
 
   const goToHome = (): void => {
@@ -39,6 +50,9 @@ const DevScreen: React.FC<DevScreenProps> = ({
       <View style={styles.container1}>
         <TouchableOpacity style={styles.btn} onPress={showLoaderFn}>
           <Text>Show Loading</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={removeData}>
+          <Text>Remove Name</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.btn} onPress={goToHome}>

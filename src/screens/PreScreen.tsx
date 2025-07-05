@@ -13,6 +13,8 @@ import { DarkTheme } from '../utils/theme';
 import { ScreenView } from '../components';
 import { useToast } from '../contexts/ToastContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { setValue } from '../redux/slices/user';
 
 type PreScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'PreScreen'>;
@@ -21,22 +23,27 @@ type PreScreenProps = {
 const PreScreen: React.FC<PreScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
+  const dispatch = useDispatch();
   const { showToast } = useToast();
   const [name, setName] = useState({
     firstName: '',
     lastName: '',
   });
 
-  const goToHome = async (): Promise<void> => {
+  const onSave = async (): Promise<void> => {
     if (name.firstName.length < 3) {
       showToast('First name must be at least 3 characters long.', 'error');
       return;
     }
-    await AsyncStorage.setItem(
-      'fullName',
-      `${name.firstName} ${name.lastName}`,
+    await AsyncStorage.setItem('firstName', `${name.firstName}`);
+    await AsyncStorage.setItem('lastName', `${name.lastName}`);
+    dispatch(
+      setValue({
+        firstName: name.firstName,
+        lastName: name.lastName || '',
+      }),
     );
-    navigation.navigate('Home');
+    navigation.replace('Dev');
   };
 
   return (
@@ -64,7 +71,7 @@ const PreScreen: React.FC<PreScreenProps> = ({
             onChangeText={value => setName({ ...name, lastName: value })}
           />
         </View>
-        <TouchableOpacity style={styles.btn} onPress={goToHome}>
+        <TouchableOpacity style={styles.btn} onPress={onSave}>
           <Text style={{ color: DarkTheme.text }}>Submit</Text>
         </TouchableOpacity>
       </View>

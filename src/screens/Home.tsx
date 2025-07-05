@@ -5,18 +5,21 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { EventExpenseList, ScreenView } from '../components';
 import { DarkTheme } from '../utils/theme';
 import { dummyEventExpenses } from '../utils/data.util';
+import { useSelector } from 'react-redux';
 
 type HomeScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Home'>;
 };
 
 const HomeScreen: React.FC<HomeScreenProps> = (): React.JSX.Element => {
-  const userName = 'John'; // Replace with dynamic value if needed
+  const { firstName, lastName } = useSelector((state: any) => state.user);
 
   return (
     <ScreenView>
       <View style={styles.container}>
-        <Text style={styles.greeting}>Hi {userName}! 👋 Welcome back</Text>
+        <Text style={styles.greeting}>
+          Hi {`${firstName} ${lastName}`}! 👋 Welcome back
+        </Text>
         <EventExpenseList expenses={dummyEventExpenses} />
       </View>
     </ScreenView>

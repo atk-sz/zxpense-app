@@ -5,17 +5,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { IRootStackParamList } from '../../utils/interfaces';
 import { DarkTheme } from '../../utils/theme';
+import { useDispatch } from 'react-redux';
+import { setValue } from '../../redux/slices/user';
 
 type LoaderComponentProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'InitLoad'>;
 };
 
 const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const checkUserName = async () => {
       try {
-        const name = await AsyncStorage.getItem('fullName');
-        if (name && name.length > 0) {
+        const firstName = await AsyncStorage.getItem('firstName');
+        const lastName = await AsyncStorage.getItem('lastName');
+        if (firstName && firstName.length > 0) {
+          dispatch(
+            setValue({
+              firstName: firstName,
+              lastName: lastName || '',
+            }),
+          );
           navigation.replace('Dev');
           // navigation.replace('Home');
         } else {
@@ -29,7 +40,8 @@ const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {
 
     const removeData = async () => {
       try {
-        await AsyncStorage.removeItem('fullName');
+        await AsyncStorage.removeItem('firstName');
+        await AsyncStorage.removeItem('lastName');
         navigation.replace('PreScreen');
       } catch (error) {
         console.error('Error removing data:', error);
@@ -38,7 +50,7 @@ const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {
 
     // removeData();
     checkUserName();
-  }, [navigation]);
+  }, [dispatch, navigation]);
 
   return (
     <View style={styles.container}>
