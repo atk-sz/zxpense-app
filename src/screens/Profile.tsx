@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -12,8 +12,7 @@ type ProfileScreenProps = {
 const ProfileScreen: React.FC<ProfileScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
-  const { value } = useSelector((state: any) => state.auth);
-  const [localVal, setLocalVal] = React.useState('');
+  const { firstName, lastName } = useSelector((state: any) => state.user);
 
   const goToHome = (): void => {
     navigation.navigate('Home');
@@ -27,14 +26,10 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
     navigation.navigate('Dev');
   };
 
-  useEffect(() => {
-    setLocalVal(value);
-  }, [value]);
-
   return (
     <ScreenView>
       <Text style={styles.text}>Profile Screen</Text>
-      <Text>This is the text: {localVal}</Text>
+      <Text>This is the text: {`${firstName} ${lastName}`}</Text>
       <TouchableOpacity style={styles.btn} onPress={goToHome}>
         <Text>Home</Text>
       </TouchableOpacity>
