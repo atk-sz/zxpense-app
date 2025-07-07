@@ -15,7 +15,7 @@ export interface IToastContextType {
   showToast: (message: string, type?: IToastType) => void;
 }
 
-export type IEventExpense = {
+export type IExpenseEvent = {
   id: string;
   eventTitle: string;
   eventDate: string;

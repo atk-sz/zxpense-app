@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { EventExpenseList, ScreenView } from '../components';
+import { ExpenseEventsList, ScreenView } from '../components';
 import { DarkTheme } from '../utils/theme';
-import { dummyEventExpenses } from '../utils/data.util';
+import { dummyExpenseEvents } from '../utils/data.util';
 import { useSelector } from 'react-redux';
 
 type HomeScreenProps = {
@@ -20,7 +20,7 @@ const HomeScreen: React.FC<HomeScreenProps> = (): React.JSX.Element => {
         <Text style={styles.greeting}>
           Hi {`${firstName} ${lastName}`}! 👋 Welcome back
         </Text>
-        <EventExpenseList expenses={dummyEventExpenses} />
+        <ExpenseEventsList expenses={dummyExpenseEvents} />
       </View>
     </ScreenView>
   );
