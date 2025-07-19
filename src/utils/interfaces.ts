@@ -1,12 +1,14 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type IRootStackParamList = {
+  Dummy: undefined;
   InitLoad: undefined;
   PreScreen: undefined;
   Dev: undefined;
   Home: undefined;
   Profile: undefined;
   Login: undefined;
+  CreateEvent: undefined;
 };
 
 export type IToastType = 'success' | 'error' | 'info';
@@ -17,8 +19,12 @@ export interface IToastContextType {
 
 export type IExpenseEvent = {
   id: string;
-  eventTitle: string;
-  eventDate: string;
+  title: string;
+  startDate: string;
+  open: boolean;
+  amount: number;
+  endDate?: string;
+  type?: string;
 };
 
 // below code is useless for now

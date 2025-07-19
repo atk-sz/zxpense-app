@@ -16,11 +16,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setValue } from '../redux/slices/user';
 
-type PreScreenProps = {
+type IPreScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'PreScreen'>;
 };
 
-const PreScreen: React.FC<PreScreenProps> = ({
+const PreScreen: React.FC<IPreScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
   const dispatch = useDispatch();

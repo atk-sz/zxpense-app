@@ -3,11 +3,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { IRootStackParamList } from '../utils/interfaces';
 import { LoaderComponent, ScreenView } from '../components';
 
-type LoaderScreenProps = {
+type IInitLoadScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'InitLoad'>;
 };
 
-const InitLoadScreen: React.FC<LoaderScreenProps> = ({ navigation }) => {
+const InitLoadScreen: React.FC<IInitLoadScreenProps> = ({ navigation }) => {
   return (
     <ScreenView>
       <LoaderComponent navigation={navigation} />

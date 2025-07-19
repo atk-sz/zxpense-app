@@ -5,11 +5,11 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
 import { ScreenView } from '../components';
 
-type LoginScreenProps = {
+type ILoginScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Login'>;
 };
 
-const LoginScreen: React.FC<LoginScreenProps> = ({
+const LoginScreen: React.FC<ILoginScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
   const { firstName, lastName } = useSelector((state: any) => state.user);

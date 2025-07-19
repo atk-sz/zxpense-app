@@ -7,6 +7,7 @@ import {
   LoginScreen,
   PreScreen,
   ProfileScreen,
+  CreateEventScreen,
 } from './src/screens';
 import { StatusBar } from 'react-native';
 import { ToastProvider } from './src/contexts/ToastContext';
@@ -34,6 +35,7 @@ function App() {
             <Stack.Screen name="PreScreen" component={PreScreen} />
             <Stack.Screen name="Dev" component={DevScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="CreateEvent" component={CreateEventScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
           </Stack.Navigator>

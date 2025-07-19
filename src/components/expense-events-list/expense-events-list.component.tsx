@@ -8,33 +8,51 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { DarkTheme } from '../../utils/theme';
-import { IExpenseEvent } from '../../utils/interfaces';
+import { IExpenseEvent, IRootStackParamList } from '../../utils/interfaces';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type IExpenseEventsListProps = {
   expenses: IExpenseEvent[];
 };
 
 const ExpenseEventsList: React.FC<IExpenseEventsListProps> = ({ expenses }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<IRootStackParamList>>();
+
   const renderExpenseItem = ({ item }: { item: IExpenseEvent }) => (
     <View style={styles.expenseItem}>
-      <Text style={styles.expenseTitle}>{item.eventTitle}</Text>
-      <Text style={styles.expenseDate}>{item.eventDate}</Text>
+      <Text style={styles.expenseTitle}>{item.title}</Text>
+      <Text style={styles.expenseDate}>{item.startDate}</Text>
     </View>
   );
 
+  const onPressCreateEvent = () => {
+    navigation.navigate('CreateEvent');
+  };
+
   return (
     <View style={styles.wrapper}>
-      <TouchableOpacity style={styles.createEventBtn}>
+      <TouchableOpacity
+        style={styles.createEventBtn}
+        onPress={onPressCreateEvent}
+      >
         <Icon name="add" size={20} color={DarkTheme.text} />
         <Text style={styles.createEventText}>Create New Event</Text>
       </TouchableOpacity>
       <Text style={styles.listTitle}>Your Events</Text>
-      <FlatList
-        data={expenses}
-        keyExtractor={item => item.id}
-        renderItem={renderExpenseItem}
-        contentContainerStyle={styles.listContainer}
-      />
+      {expenses.length === 0 ? (
+        <Text style={styles.emptyMessage}>
+          You don't have any events yet! 😒😢
+        </Text>
+      ) : (
+        <FlatList
+          data={expenses}
+          keyExtractor={item => item.id}
+          renderItem={renderExpenseItem}
+          contentContainerStyle={styles.listContainer}
+        />
+      )}
     </View>
   );
 };
@@ -86,5 +104,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 8,
+  },
+  emptyMessage: {
+    textAlign: 'center',
+    color: DarkTheme.text,
+    fontSize: 16,
+    marginTop: 24,
   },
 });

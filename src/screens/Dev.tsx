@@ -6,11 +6,11 @@ import { ScreenView } from '../components';
 import { useLoader } from '../contexts/LoaderContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type DevScreenProps = {
+type IDevScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Dev'>;
 };
 
-const DevScreen: React.FC<DevScreenProps> = ({
+const DevScreen: React.FC<IDevScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
   const { showLoader, hideLoader } = useLoader();

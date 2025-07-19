@@ -7,11 +7,11 @@ import { DarkTheme } from '../utils/theme';
 import { dummyExpenseEvents } from '../utils/data.util';
 import { useSelector } from 'react-redux';
 
-type HomeScreenProps = {
+type IHomeScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Home'>;
 };
 
-const HomeScreen: React.FC<HomeScreenProps> = (): React.JSX.Element => {
+const HomeScreen: React.FC<IHomeScreenProps> = (): React.JSX.Element => {
   const { firstName, lastName } = useSelector((state: any) => state.user);
 
   return (
