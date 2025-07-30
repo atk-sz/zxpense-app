@@ -20,11 +20,12 @@ export interface IToastContextType {
 export type IExpenseEvent = {
   id: string;
   title: string;
-  startDate: string;
-  open: boolean;
-  amount: number;
+  type: 'personal' | 'group';
+  date: string;
+  incomingAmount: number;
+  outgoingAmount: number;
+  startDate?: string;
   endDate?: string;
-  type?: string;
 };
 
 // below code is useless for now
