@@ -1,24 +1,55 @@
 1. creat new app ref (https://reactnative.dev/docs/getting-started-without-a-framework)
 npx @react-native-community/cli@latest init AppName
+
+================================================================
+2 to run app
 2.1 (terminal1)
 npm start
 2.2 (terminal2)
 npm run android
     or
-2. 
+2.1 
 npx react-native run-android
 
+================================================================
 3. to show console.log()
 npx react-native log-android
 
+================================================================
 4. for navigation
 npm install @react-navigation/native @react-navigation/native-stack
 npm install react-native-screens react-native-safe-area-context
 
+================================================================
 5. to clear android cache
 cd android
-./gradlew clean or gradlew clean
+./gradlew clean
+or on cmd
+gradlew clean
+5.1 if clean fails run below command & then above commands
+rmdir /s /q %USERPROFILE%\.gradle\caches
+5.2 if it does't work still then run below command & then above commands (5) (very critical/danger command & '1>nul' use to hide naming of each file)
+del /f /s /q  %USERPROFILE%\.gradle
+del /f /s /q  %USERPROFILE%\AppData\Temp
+rm -rf node_modules
+rm -rf android/.gradle
+rm -rf android/app/.cxx
+rm -rf android/build
+rm -rf android/app/build
+rm -rf ios/build
+rm yarn.lock package-lock.json
+npm cache clean --force
 
+npm install
+cd android
+./gradlew --refresh-dependencies
+./gradlew clean
+./gradlew assembleDebug
+
+5.3
+npx react-native start --reset-cache
+
+================================================================
 6. to add icons in any react native cli(will need to re-run the app)
 6.1 install package
 npm install react-native-vector-icons
@@ -28,6 +59,7 @@ apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 <Icon name="home" size={30} color="#000" />
 
+================================================================
 7. Change the App Display Name (what shows on the phone)
 7.1 open below file
 android/app/src/main/res/values/strings.xml
@@ -44,6 +76,7 @@ npx react-native run-android
 cd ios && pod install && cd ..
 npx react-native run-ios
 
+================================================================
 8. if failed to bundle then follow below 
 rm -rf android/.gradle
 rm -rf android/app/build
@@ -52,6 +85,7 @@ rm -rf ios/build
 rm -rf android/build
 npm install
 
+================================================================
 9. to release
 9.1 debug mode apk, apk will be generated in android/app/build/outputs/apk/debug/app-debug.apk
 cd android
@@ -61,3 +95,16 @@ adb install android/app/build/outputs/apk/debug/app-debug.apk
 9.2 release mode apk, apk will be generated in android/app/build/outputs/apk/release/app-release.apk
 cd android
 ./gradlew assembleRelease
+================================================================
+10. to add env variables
+10.1 add package
+npm i react-native-config
+10.2 create .env & add vars
+API_URL=https://myapi.com
+10.3 add below line in android/app/build.gradle at the bottom or just below other "apply"s
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+10.4 import & use in app
+import Config from "react-native-config";
+Config.API_URL; // 'https://myapi.com'
+if failed to load environment vars then refer
+https://www.npmjs.com/package/react-native-config

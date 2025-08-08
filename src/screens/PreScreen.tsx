@@ -15,6 +15,7 @@ import { useToast } from '../contexts/ToastContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setValue } from '../redux/slices/user';
+import Config from 'react-native-config';
 
 type IPreScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'PreScreen'>;
@@ -30,20 +31,25 @@ const PreScreen: React.FC<IPreScreenProps> = ({
     lastName: '',
   });
 
+  console.log('Config: ', Config);
+  console.log('API_URL: ', Config.API_URL);
+
   const onSave = async (): Promise<void> => {
     if (name.firstName.length < 3) {
       showToast('First name must be at least 3 characters long.', 'error');
       return;
     }
-    await AsyncStorage.setItem('firstName', `${name.firstName}`);
-    await AsyncStorage.setItem('lastName', `${name.lastName}`);
-    dispatch(
-      setValue({
-        firstName: name.firstName,
-        lastName: name.lastName || '',
-      }),
-    );
-    navigation.replace('Dev');
+    console.log('Config: ', Config);
+    console.log('API_URL: ', Config.API_URL);
+    // await AsyncStorage.setItem('firstName', `${name.firstName}`);
+    // await AsyncStorage.setItem('lastName', `${name.lastName}`);
+    // dispatch(
+    //   setValue({
+    //     firstName: name.firstName,
+    //     lastName: name.lastName || '',
+    //   }),
+    // );
+    // navigation.replace('Dev');
   };
 
   return (
