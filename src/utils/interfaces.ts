@@ -1,5 +1,3 @@
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-
 export type IRootStackParamList = {
   Dummy: undefined;
   InitLoad: undefined;
@@ -17,17 +15,25 @@ export interface IToastContextType {
   showToast: (message: string, type?: IToastType) => void;
 }
 
-export type IExpenseEvent = {
+export interface IExpenseEvent {
   id: string;
   title: string;
   startDate: string;
   isMultiDay: boolean;
   type: 'personal' | 'group';
+  balanceAmount: number;
   incomingAmount: number;
   outgoingAmount: number;
   endDate?: string;
-};
+  transactions: IEventTransaction[];
+  open: boolean;
+}
 
-// below code is useless for now
-export type RootStackScreenProps<T extends keyof IRootStackParamList> =
-  NativeStackScreenProps<IRootStackParamList, T>;
+export interface IEventTransaction {
+  id: string;
+  amount: number;
+  type: 'incoming' | 'outgoing' | 'open';
+  description: string;
+  date: string;
+  eventId: string;
+}

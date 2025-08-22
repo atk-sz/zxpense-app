@@ -7,31 +7,38 @@ import {
   View,
   Switch,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { DarkTheme } from '../../utils/theme';
 import { IExpenseEvent } from '../../utils/interfaces';
 import { useToast } from '../../contexts/ToastContext';
 
-type IEventExpenseFormProps = {};
+type IExpenseEventFormProps = {};
 
-const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
+const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
   const { showToast } = useToast();
   const [formErrors, setFormErrors] = useState<
     Partial<Record<keyof IExpenseEvent, string>>
   >({});
 
-  const [formData, setFormData] = useState<IExpenseEvent>({
+  const [formValues, setFormValues] = useState<IExpenseEvent>({
     id: '',
     title: '',
     type: 'personal',
     startDate: '',
-    isMultiDay: false, // renamed toggle meaning = multi-day
+    isMultiDay: false,
     incomingAmount: 0,
     outgoingAmount: 0,
+    balanceAmount: 0,
     endDate: '',
+    transactions: [],
+    open: true,
   });
 
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
   const handleChange = (key: keyof IExpenseEvent, value: any) => {
-    setFormData(prev => ({ ...prev, [key]: value }));
+    setFormValues(prev => ({ ...prev, [key]: value }));
   };
 
   const onSubmit = (data: IExpenseEvent) => {
@@ -42,12 +49,11 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
   const handleSubmit = () => {
     const errors: Partial<Record<keyof IExpenseEvent, string>> = {};
 
-    if (!formData.title.trim()) {
+    if (!formValues.title.trim()) {
       errors.title = 'Event title is required.';
     }
 
-    // startDate (or single date) is always required
-    if (!formData.startDate?.trim()) {
+    if (!formValues.startDate?.trim()) {
       errors.startDate = 'Date is required.';
     }
 
@@ -58,7 +64,7 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
     }
 
     setFormErrors({});
-    onSubmit(formData);
+    onSubmit(formValues);
   };
 
   return (
@@ -70,7 +76,7 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
           style={styles.input}
           placeholder="Enter event title"
           placeholderTextColor={DarkTheme.grey}
-          value={formData.title}
+          value={formValues.title}
           onChangeText={text => handleChange('title', text)}
         />
         <Text style={styles.errorText}>{formErrors.title ?? ' '}</Text>
@@ -79,24 +85,44 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
       {/* Start Date (always required) */}
       <View style={styles.formComponentContainer}>
         <Text style={styles.label}>
-          {formData.isMultiDay ? 'Start Date *' : 'Date *'}
+          {formValues.isMultiDay ? 'Start Date *' : 'Date *'}
         </Text>
-        <TextInput
+        <TouchableOpacity
           style={styles.input}
-          placeholder="YYYY-MM-DD"
-          placeholderTextColor={DarkTheme.grey}
-          value={formData.startDate}
-          onChangeText={text => handleChange('startDate', text)}
-        />
+          onPress={() => setShowStartDatePicker(true)}
+        >
+          <Text style={{ color: DarkTheme.dark }}>
+            {formValues.startDate || 'Select date'}
+          </Text>
+        </TouchableOpacity>
+        {showStartDatePicker && (
+          <DateTimePicker
+            value={
+              formValues.startDate ? new Date(formValues.startDate) : new Date()
+            }
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              console.log('event', event);
+              setShowStartDatePicker(false);
+              if (event.type === 'set' && selectedDate) {
+                handleChange(
+                  'startDate',
+                  selectedDate.toISOString().split('T')[0],
+                );
+              }
+            }}
+          />
+        )}
         <Text style={styles.errorText}>{formErrors.startDate ?? ' '}</Text>
       </View>
 
       {/* Group Toggle */}
       <View style={styles.formComponentContainer}>
         <View style={styles.switchContainer}>
-          <Text style={styles.label}>Is it a group event?</Text>
+          <Text style={styles.label}>Group event?</Text>
           <Switch
-            value={formData.type === 'group'}
+            value={formValues.type === 'group'}
             onValueChange={value =>
               handleChange('type', value ? 'group' : 'personal')
             }
@@ -110,14 +136,11 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
       {/* Multi-day Toggle */}
       <View style={styles.formComponentContainer}>
         <View style={styles.switchContainer}>
-          <Text style={styles.label}>Is this a multi-day event?</Text>
+          <Text style={styles.label}>Multi-day event?</Text>
           <Switch
-            value={formData.isMultiDay}
+            value={formValues.isMultiDay}
             onValueChange={value => {
-              // clear endDate if toggled off
-              if (!value) {
-                handleChange('endDate', '');
-              }
+              if (!value) handleChange('endDate', '');
               handleChange('isMultiDay', value);
             }}
             thumbColor={DarkTheme.text}
@@ -127,17 +150,35 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
       </View>
 
       {/* End Date (only if multi-day) */}
-      {formData.isMultiDay && (
+      {formValues.isMultiDay && (
         <View style={styles.formComponentContainer}>
           <Text style={styles.label}>End Date</Text>
-          <TextInput
+          <TouchableOpacity
             style={styles.input}
-            placeholder="YYYY-MM-DD"
-            placeholderTextColor={DarkTheme.grey}
-            value={formData.endDate}
-            onChangeText={text => handleChange('endDate', text)}
-          />
-          <Text style={styles.errorText}>{formErrors.endDate ?? ' '}</Text>
+            onPress={() => setShowEndDatePicker(true)}
+          >
+            <Text style={{ color: DarkTheme.dark }}>
+              {formValues.endDate || 'Select date'}
+            </Text>
+          </TouchableOpacity>
+          {showEndDatePicker && (
+            <DateTimePicker
+              value={
+                formValues.endDate ? new Date(formValues.endDate) : new Date()
+              }
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setShowEndDatePicker(false);
+                if (event.type === 'set' && selectedDate) {
+                  handleChange(
+                    'endDate',
+                    selectedDate.toISOString().split('T')[0],
+                  );
+                }
+              }}
+            />
+          )}
         </View>
       )}
 
@@ -149,7 +190,7 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
   );
 };
 
-export default EventExpenseForm;
+export default ExpenseEventForm;
 
 const styles = StyleSheet.create({
   formContainer: {
