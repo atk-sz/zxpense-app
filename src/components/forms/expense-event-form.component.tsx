@@ -9,12 +9,21 @@ import {
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { DarkTheme } from '../../utils/theme';
-import { IExpenseEvent } from '../../utils/interfaces';
+import { IExpenseEvent, IRootStackParamList } from '../../utils/interfaces';
 import { useToast } from '../../contexts/ToastContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { addEvent } from '../../redux/slices/events';
+import { saveOpenEvent } from '../../redux/slices/event';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-type IExpenseEventFormProps = {};
+type IExpenseEventFormProps = {
+  navigation: NativeStackNavigationProp<IRootStackParamList, 'CreateEvent'>;
+};
 
-const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
+const ExpenseEventForm: React.FC<IExpenseEventFormProps> = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const events = useSelector((state: any) => state.events);
   const { showToast } = useToast();
   const [formErrors, setFormErrors] = useState<
     Partial<Record<keyof IExpenseEvent, string>>
@@ -37,13 +46,25 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
+  const generateEventId = (title: string) => {
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const unique = Math.random().toString(36).substring(2, 10); // random 8 chars
+    return `${slug}-${unique}`;
+  };
+
   const handleChange = (key: keyof IExpenseEvent, value: any) => {
     setFormValues(prev => ({ ...prev, [key]: value }));
   };
 
-  const onSubmit = (data: IExpenseEvent) => {
-    console.log('submitted data');
-    console.log(data);
+  const onSubmit = async (newEvent: IExpenseEvent) => {
+    dispatch(addEvent(newEvent));
+    dispatch(saveOpenEvent(newEvent));
+    await AsyncStorage.setItem('openEvent', JSON.stringify(newEvent));
+    await AsyncStorage.setItem(
+      'eventsList',
+      JSON.stringify([...events, newEvent]),
+    );
+    navigation.replace('Home');
   };
 
   const handleSubmit = () => {
@@ -64,7 +85,9 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
     }
 
     setFormErrors({});
-    onSubmit(formValues);
+    const newId = generateEventId(formValues.title);
+    handleChange('id', newId);
+    onSubmit({ ...formValues, id: newId });
   };
 
   return (
@@ -103,7 +126,6 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
             mode="date"
             display="default"
             onChange={(event, selectedDate) => {
-              console.log('event', event);
               setShowStartDatePicker(false);
               if (event.type === 'set' && selectedDate) {
                 handleChange(

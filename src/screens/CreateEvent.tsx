@@ -9,13 +9,13 @@ type ICreateEventScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'CreateEvent'>;
 };
 
-const CreateEventScreen: React.FC<
-  ICreateEventScreenProps
-> = (): React.JSX.Element => {
+const CreateEventScreen: React.FC<ICreateEventScreenProps> = ({
+  navigation,
+}): React.JSX.Element => {
   return (
     <ScreenView>
       <View style={styles.container}>
-        <ExpenseEventForm />
+        <ExpenseEventForm navigation={navigation} />
       </View>
     </ScreenView>
   );

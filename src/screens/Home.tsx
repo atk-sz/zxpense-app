@@ -12,7 +12,14 @@ type IHomeScreenProps = {
 };
 
 const HomeScreen: React.FC<IHomeScreenProps> = (): React.JSX.Element => {
+  const events = useSelector((state: any) => state.events);
   const { firstName, lastName } = useSelector((state: any) => state.user);
+
+  console.log('events');
+  console.log(events);
+  console.log('typeof events', typeof events);
+  console.log('is array', Array.isArray(events));
+  console.log('length', events.length);
 
   return (
     <ScreenView>

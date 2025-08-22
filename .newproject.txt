@@ -10,6 +10,8 @@ npm run android
     or
 2.1 
 npx react-native run-android
+2.2 if new package is installed than before above command run below command
+npm start -- --reset-cache
 
 ================================================================
 3. to show console.log()
