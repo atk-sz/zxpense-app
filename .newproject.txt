@@ -108,3 +108,38 @@ import Config from "react-native-config";
 Config.API_URL; // 'https://myapi.com'
 if failed to load environment vars then refer
 https://www.npmjs.com/package/react-native-config
+---as both env package are unsafe for sensitive values always use BE to such values & below package does not require hard rebuild so makes the dev work easy------------------------------------------
+10 we can also use react-native-dotenv
+10.1 npm install react-native-dotenv
+10.2 in babel.config.js
+module.exports = {
+  ..other decs
+  plugins: [
+    [
+      "module:react-native-dotenv",
+      {
+        moduleName: "@env",
+        path: ".env",
+        blacklist: null,
+        whitelist: null,
+        safe: false,
+        allowUndefined: true
+      }
+    ]
+  ]
+};
+10.3 create .env & add required vars
+10.4 create declerations file for ease of use(optional)
+10.4.1 create a file env.d.ts
+10.4.2 in the file add below codes 
+declare module "@env" {
+  export const API_URL: string;
+  export const APP_ENV: string;
+}
+10.5 usage
+import { API_URL, APP_ENV } from "@env";
+
+console.log("API URL:", API_URL);
+console.log("App Environment:", APP_ENV);
+10.6 after all the above restart app with below command (important)
+npm start -- --reset-cache
