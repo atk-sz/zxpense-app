@@ -5,6 +5,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenView } from '../components';
 import { useLoader } from '../contexts/LoaderContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DarkTheme } from '../utils/theme';
 
 type IDevScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Dev'>;
@@ -76,17 +77,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 30,
+    color: DarkTheme.text,
   },
   container1: {
     flexDirection: 'row',
-    flex: 1,
     justifyContent: 'space-evenly',
     alignItems: 'center',
-  },
-  textInput: {
-    flex: 3,
-    color: '#ffffff',
-    backgroundColor: '#000000',
   },
   btn: {
     backgroundColor: '#00ff00',
