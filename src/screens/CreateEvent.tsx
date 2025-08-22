@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DarkTheme } from '../utils/theme';
-import { EventExpenseForm, ScreenView } from '../components';
+import { ExpenseEventForm, ScreenView } from '../components';
 
 type ICreateEventScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'CreateEvent'>;
@@ -15,7 +15,7 @@ const CreateEventScreen: React.FC<
   return (
     <ScreenView>
       <View style={styles.container}>
-        <EventExpenseForm />
+        <ExpenseEventForm />
       </View>
     </ScreenView>
   );
