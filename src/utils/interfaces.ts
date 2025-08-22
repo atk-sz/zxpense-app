@@ -20,11 +20,11 @@ export interface IToastContextType {
 export type IExpenseEvent = {
   id: string;
   title: string;
+  startDate: string;
+  isMultiDay: boolean;
   type: 'personal' | 'group';
-  date: string;
   incomingAmount: number;
   outgoingAmount: number;
-  startDate?: string;
   endDate?: string;
 };
 

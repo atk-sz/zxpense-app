@@ -22,10 +22,12 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
   const [formData, setFormData] = useState<IExpenseEvent>({
     id: '',
     title: '',
-    date: '',
+    type: 'personal',
+    startDate: '',
+    isMultiDay: false, // renamed toggle meaning = multi-day
     incomingAmount: 0,
     outgoingAmount: 0,
-    type: 'personal',
+    endDate: '',
   });
 
   const handleChange = (key: keyof IExpenseEvent, value: any) => {
@@ -43,10 +45,10 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
     if (!formData.title.trim()) {
       errors.title = 'Event title is required.';
     }
-    if (formData.type === 'group') {
-      if (!formData.startDate?.trim()) {
-        errors.startDate = 'Start date is required for group events.';
-      }
+
+    // startDate (or single date) is always required
+    if (!formData.startDate?.trim()) {
+      errors.startDate = 'Date is required.';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -61,18 +63,35 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
 
   return (
     <View style={styles.formContainer}>
+      {/* Title */}
       <View style={styles.formComponentContainer}>
         <Text style={styles.label}>Title *</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter event title"
-          placeholderTextColor="#ccc"
+          placeholderTextColor={DarkTheme.grey}
           value={formData.title}
           onChangeText={text => handleChange('title', text)}
         />
         <Text style={styles.errorText}>{formErrors.title ?? ' '}</Text>
       </View>
 
+      {/* Start Date (always required) */}
+      <View style={styles.formComponentContainer}>
+        <Text style={styles.label}>
+          {formData.isMultiDay ? 'Start Date *' : 'Date *'}
+        </Text>
+        <TextInput
+          style={styles.input}
+          placeholder="YYYY-MM-DD"
+          placeholderTextColor={DarkTheme.grey}
+          value={formData.startDate}
+          onChangeText={text => handleChange('startDate', text)}
+        />
+        <Text style={styles.errorText}>{formErrors.startDate ?? ' '}</Text>
+      </View>
+
+      {/* Group Toggle */}
       <View style={styles.formComponentContainer}>
         <View style={styles.switchContainer}>
           <Text style={styles.label}>Is it a group event?</Text>
@@ -82,40 +101,47 @@ const EventExpenseForm: React.FC<IEventExpenseFormProps> = () => {
               handleChange('type', value ? 'group' : 'personal')
             }
             thumbColor={DarkTheme.text}
-            trackColor={{ false: '#555', true: DarkTheme.secondary }}
+            trackColor={{ false: DarkTheme.grey, true: DarkTheme.secondary }}
           />
         </View>
         <Text style={styles.errorText}>{formErrors.type ?? ' '}</Text>
       </View>
 
-      {formData.type === 'group' && (
-        <>
-          <View style={styles.formComponentContainer}>
-            <Text style={styles.label}>Start Date *</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="YYYY-MM-DD"
-              placeholderTextColor="#ccc"
-              value={formData.startDate || ''}
-              onChangeText={text => handleChange('startDate', text)}
-            />
-            <Text style={styles.errorText}>{formErrors.startDate ?? ' '}</Text>
-          </View>
+      {/* Multi-day Toggle */}
+      <View style={styles.formComponentContainer}>
+        <View style={styles.switchContainer}>
+          <Text style={styles.label}>Is this a multi-day event?</Text>
+          <Switch
+            value={formData.isMultiDay}
+            onValueChange={value => {
+              // clear endDate if toggled off
+              if (!value) {
+                handleChange('endDate', '');
+              }
+              handleChange('isMultiDay', value);
+            }}
+            thumbColor={DarkTheme.text}
+            trackColor={{ false: DarkTheme.grey, true: DarkTheme.secondary }}
+          />
+        </View>
+      </View>
 
-          <View style={styles.formComponentContainer}>
-            <Text style={styles.label}>End Date (optional)</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="YYYY-MM-DD"
-              placeholderTextColor="#ccc"
-              value={formData.endDate}
-              onChangeText={text => handleChange('endDate', text)}
-            />
-            <Text style={styles.errorText}>{formErrors.endDate ?? ' '}</Text>
-          </View>
-        </>
+      {/* End Date (only if multi-day) */}
+      {formData.isMultiDay && (
+        <View style={styles.formComponentContainer}>
+          <Text style={styles.label}>End Date</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="YYYY-MM-DD"
+            placeholderTextColor={DarkTheme.grey}
+            value={formData.endDate}
+            onChangeText={text => handleChange('endDate', text)}
+          />
+          <Text style={styles.errorText}>{formErrors.endDate ?? ' '}</Text>
+        </View>
       )}
 
+      {/* Submit */}
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
         <Text style={styles.submitButtonText}>Create Event</Text>
       </TouchableOpacity>
@@ -129,7 +155,7 @@ const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
     width: '100%',
-    marginTop: 150,
+    marginTop: 100,
     backgroundColor: DarkTheme.primary,
     padding: 16,
     borderRadius: 10,
