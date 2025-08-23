@@ -28,9 +28,17 @@ const eventsSlice = createSlice({
         };
       }
     },
+    initializeEvents: (state, action: PayloadAction<IExpenseEvent[]>) => {
+      return action.payload;
+    },
   },
 });
 
-export const { addEvent, removeEvent, clearAllEvents, updateEvent } =
-  eventsSlice.actions;
+export const {
+  addEvent,
+  removeEvent,
+  clearAllEvents,
+  updateEvent,
+  initializeEvents,
+} = eventsSlice.actions;
 export default eventsSlice.reducer;

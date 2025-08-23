@@ -51,6 +51,7 @@ const ExpenseEventsList: React.FC<IExpenseEventsListProps> = ({ expenses }) => {
           keyExtractor={item => item.id}
           renderItem={renderExpenseItem}
           contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>

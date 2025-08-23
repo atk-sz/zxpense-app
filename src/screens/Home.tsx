@@ -4,7 +4,6 @@ import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ExpenseEventsList, ScreenView } from '../components';
 import { DarkTheme } from '../utils/theme';
-import { dummyExpenseEvents } from '../utils/data.util';
 import { useSelector } from 'react-redux';
 
 type IHomeScreenProps = {
@@ -15,11 +14,11 @@ const HomeScreen: React.FC<IHomeScreenProps> = (): React.JSX.Element => {
   const events = useSelector((state: any) => state.events);
   const { firstName, lastName } = useSelector((state: any) => state.user);
 
-  console.log('events');
-  console.log(events);
-  console.log('typeof events', typeof events);
-  console.log('is array', Array.isArray(events));
-  console.log('length', events.length);
+  // console.log('events');
+  // console.log(events);
+  // console.log('typeof events', typeof events);
+  // console.log('is array', Array.isArray(events));
+  // console.log('length', events.length);
 
   return (
     <ScreenView>
@@ -27,7 +26,7 @@ const HomeScreen: React.FC<IHomeScreenProps> = (): React.JSX.Element => {
         <Text style={styles.greeting}>
           Hi {`${firstName} ${lastName}`}! 👋 Welcome back
         </Text>
-        <ExpenseEventsList expenses={dummyExpenseEvents} />
+        <ExpenseEventsList expenses={events} />
       </View>
     </ScreenView>
   );

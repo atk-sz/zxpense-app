@@ -7,6 +7,8 @@ import { IRootStackParamList } from '../../utils/interfaces';
 import { DarkTheme } from '../../utils/theme';
 import { useDispatch } from 'react-redux';
 import { setValue } from '../../redux/slices/user';
+import { saveOpenEvent } from '../../redux/slices/event';
+import { initializeEvents } from '../../redux/slices/events';
 
 type LoaderComponentProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'InitLoad'>;
@@ -20,6 +22,10 @@ const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {
       try {
         const firstName = await AsyncStorage.getItem('firstName');
         const lastName = await AsyncStorage.getItem('lastName');
+        const openEvent = await AsyncStorage.getItem('openEvent');
+        const eventsList = await AsyncStorage.getItem('eventsList');
+        const events = eventsList ? JSON.parse(eventsList) : [];
+        const openEventObj = openEvent ? JSON.parse(openEvent) : null;
         if (firstName && firstName.length > 0) {
           dispatch(
             setValue({
@@ -27,6 +33,8 @@ const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {
               lastName: lastName || '',
             }),
           );
+          dispatch(initializeEvents(events));
+          dispatch(saveOpenEvent(openEventObj));
           navigation.replace('Dev');
           // navigation.replace('Home');
         } else {
