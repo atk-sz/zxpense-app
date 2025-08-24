@@ -16,12 +16,13 @@ import { addEvent } from '../../redux/slices/events';
 import { saveOpenEvent } from '../../redux/slices/event';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
-type IExpenseEventFormProps = {
-  navigation: NativeStackNavigationProp<IRootStackParamList, 'CreateEvent'>;
-};
+type IExpenseEventFormProps = {};
 
-const ExpenseEventForm: React.FC<IExpenseEventFormProps> = ({ navigation }) => {
+const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<IRootStackParamList>>();
   const dispatch = useDispatch();
   const events = useSelector((state: any) => state.events);
   const { showToast } = useToast();

@@ -8,12 +8,13 @@ import { useDispatch } from 'react-redux';
 import { setValue } from '../../redux/slices/user';
 import { saveOpenEvent } from '../../redux/slices/event';
 import { initializeEvents } from '../../redux/slices/events';
+import { useNavigation } from '@react-navigation/native';
 
-type LoaderComponentProps = {
-  navigation: NativeStackNavigationProp<IRootStackParamList, 'InitLoad'>;
-};
+type LoaderComponentProps = {};
 
-const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {
+const LoaderComponent: React.FC<LoaderComponentProps> = () => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<IRootStackParamList>>();
   const dispatch = useDispatch();
 
   useEffect(() => {

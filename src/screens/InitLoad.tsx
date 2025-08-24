@@ -7,10 +7,10 @@ type IInitLoadScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'InitLoad'>;
 };
 
-const InitLoadScreen: React.FC<IInitLoadScreenProps> = ({ navigation }) => {
+const InitLoadScreen: React.FC<IInitLoadScreenProps> = () => {
   return (
     <ScreenView>
-      <LoaderComponent navigation={navigation} />
+      <LoaderComponent />
     </ScreenView>
   );
 };
