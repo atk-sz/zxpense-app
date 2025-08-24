@@ -22,9 +22,9 @@ export interface IExpenseEvent {
   startDate: string;
   isMultiDay: boolean;
   type: 'personal' | 'group';
-  balanceAmount: number;
-  incomingAmount: number;
-  outgoingAmount: number;
+  balanceAmount: string;
+  incomingAmount: string;
+  outgoingAmount: string;
   endDate?: string;
   transactions: IEventTransaction[];
   open: boolean;
@@ -32,7 +32,7 @@ export interface IExpenseEvent {
 
 export interface IEventTransaction {
   id: string;
-  amount: number;
+  amount: string;
   type: 'incoming' | 'outgoing' | 'open';
   description: string;
   date: string;
