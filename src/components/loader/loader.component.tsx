@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
 import { ActivityIndicator, View, StyleSheet, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -46,17 +45,6 @@ const LoaderComponent: React.FC<LoaderComponentProps> = ({ navigation }) => {
       }
     };
 
-    const removeData = async () => {
-      try {
-        await AsyncStorage.removeItem('firstName');
-        await AsyncStorage.removeItem('lastName');
-        navigation.replace('PreScreen');
-      } catch (error) {
-        console.error('Error removing data:', error);
-      }
-    };
-
-    // removeData();
     checkUserName();
   }, [dispatch, navigation]);
 

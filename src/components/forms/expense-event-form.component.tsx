@@ -64,7 +64,7 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = ({ navigation }) => {
       'eventsList',
       JSON.stringify([...events, newEvent]),
     );
-    navigation.replace('Home');
+    navigation.navigate('Home');
   };
 
   const handleSubmit = () => {
