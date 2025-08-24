@@ -7,6 +7,7 @@ export type IRootStackParamList = {
   Profile: undefined;
   Login: undefined;
   CreateEvent: undefined;
+  EventDetails: { id: string };
 };
 
 export type IToastType = 'success' | 'error' | 'info';

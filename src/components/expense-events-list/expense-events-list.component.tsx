@@ -21,10 +21,15 @@ const ExpenseEventsList: React.FC<IExpenseEventsListProps> = ({ expenses }) => {
     useNavigation<NativeStackNavigationProp<IRootStackParamList>>();
 
   const renderExpenseItem = ({ item }: { item: IExpenseEvent }) => (
-    <View style={styles.expenseItem}>
+    <TouchableOpacity
+      style={styles.expenseItem}
+      onPress={() => {
+        navigation.navigate('EventDetails', { id: item.id });
+      }}
+    >
       <Text style={styles.expenseTitle}>{item.title}</Text>
       <Text style={styles.expenseDate}>{item.startDate}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   const onPressCreateEvent = () => {
