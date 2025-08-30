@@ -15,7 +15,7 @@ import DateTimePicker, {
 import { IEventTransaction, IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DarkTheme } from '../utils/theme';
-import { ScreenView } from '../components';
+import { ScreenView, ToastComponent } from '../components';
 import { RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -31,6 +31,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   const [showForm, setShowForm] = useState(false);
+  const [showErrorToast, setShowErrorToast] = useState(false);
   const [formErrors, setFormErrors] = useState<
     Partial<Record<keyof IEventTransaction, string>>
   >({});
@@ -170,8 +171,8 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
     }
 
     if (Object.keys(errors).length > 0) {
-      showToast('Please fill all required fields.', 'error');
       setFormErrors(errors);
+      setShowErrorToast(true);
       return;
     }
 
@@ -250,6 +251,12 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
         animationType="fade"
         onRequestClose={() => setShowForm(false)}
       >
+        {showErrorToast && (
+          <ToastComponent
+            message="Please fill all required fields."
+            type="error"
+          />
+        )}
         <View style={styles.overlay}>
           <ScrollView
             style={styles.formContainer}
