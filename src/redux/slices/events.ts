@@ -8,13 +8,16 @@ const eventsSlice = createSlice({
   name: 'events',
   initialState,
   reducers: {
+    initializeEvents: (state, action: PayloadAction<IExpenseEvent[]>) => {
+      return action.payload;
+    },
+    clearAllEvents: () => [],
     addEvent: (state, action: PayloadAction<IExpenseEvent>) => {
       state.push(action.payload);
     },
     removeEvent: (state, action: PayloadAction<string>) => {
       return state.filter(event => event.id !== action.payload);
     },
-    clearAllEvents: () => [],
     updateEvent: (
       state,
       action: PayloadAction<{ id: string; updates: Partial<IExpenseEvent> }>,
@@ -28,17 +31,14 @@ const eventsSlice = createSlice({
         };
       }
     },
-    initializeEvents: (state, action: PayloadAction<IExpenseEvent[]>) => {
-      return action.payload;
-    },
   },
 });
 
 export const {
+  initializeEvents,
+  clearAllEvents,
   addEvent,
   removeEvent,
-  clearAllEvents,
   updateEvent,
-  initializeEvents,
 } = eventsSlice.actions;
 export default eventsSlice.reducer;

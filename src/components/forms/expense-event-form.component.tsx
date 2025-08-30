@@ -17,6 +17,7 @@ import { saveOpenEvent } from '../../redux/slices/event';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { generateId } from '../../utils/common.util';
 
 type IExpenseEventFormProps = {};
 
@@ -46,12 +47,6 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
 
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-
-  const generateEventId = (title: string) => {
-    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const unique = Math.random().toString(36).substring(2, 10); // random 8 chars
-    return `${slug}-${unique}`;
-  };
 
   const handleChange = (key: keyof IExpenseEvent, value: any) => {
     setFormValues(prev => ({ ...prev, [key]: value }));
@@ -86,7 +81,7 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
     }
 
     setFormErrors({});
-    const newId = generateEventId(formValues.title);
+    const newId = generateId(formValues.title, 8);
     handleChange('id', newId);
     onSubmit({ ...formValues, id: newId });
   };

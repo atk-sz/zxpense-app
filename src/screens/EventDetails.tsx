@@ -20,6 +20,7 @@ import { RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from '../contexts/ToastContext';
+import { generateId } from '../utils/common.util';
 
 type IEventDetailsScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'EventDetails'>;
@@ -59,7 +60,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
     return `${formatDate(date)}T${formatTime(date)}`;
   };
 
-  const [form, setForm] = useState<IEventTransaction>({
+  const [formValues, setFormValues] = useState<IEventTransaction>({
     id: '',
     amount: '',
     type: 'incoming',
@@ -71,7 +72,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
   });
 
   const handleChange = (key: keyof IEventTransaction, value: any) => {
-    setForm(prev => ({ ...prev, [key]: value }));
+    setFormValues(prev => ({ ...prev, [key]: value }));
 
     // Clear the error for this field when user starts typing
     if (formErrors[key]) {
@@ -93,7 +94,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
       newDateTime.setMinutes(currentDateTime.getMinutes());
 
       setSelectedDate(newDateTime);
-      setForm(prev => ({ ...prev, date: formatDateTime(newDateTime) }));
+      setFormValues(prev => ({ ...prev, date: formatDateTime(newDateTime) }));
 
       // Clear date error when date is changed
       if (formErrors.date) {
@@ -115,7 +116,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
       newDateTime.setMinutes(time.getMinutes());
 
       setSelectedDate(newDateTime);
-      setForm(prev => ({ ...prev, date: formatDateTime(newDateTime) }));
+      setFormValues(prev => ({ ...prev, date: formatDateTime(newDateTime) }));
 
       // Clear date error when time is changed
       if (formErrors.date) {
@@ -136,28 +137,56 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
     setShowTimePicker(true);
   };
 
+  const onSubmit = async (newTransaction: IEventTransaction) => {
+    console.log('newTransaction', newTransaction);
+    // dispatch(addEvent(newEvent));
+    // dispatch(saveOpenEvent(newEvent));
+    // await AsyncStorage.setItem('openEvent', JSON.stringify(newEvent));
+    // await AsyncStorage.setItem(
+    //   'eventsList',
+    //   JSON.stringify([...events, newEvent]),
+    // );
+    // navigation.navigate('Home');
+
+    setShowForm(false);
+    showToast('Transaction added successfully!', 'success');
+    setFormErrors({});
+    const newDate = new Date();
+    setSelectedDate(newDate);
+    setFormValues({
+      id: '',
+      amount: '',
+      type: 'incoming',
+      description: '',
+      date: formatDateTime(newDate),
+      eventId: id,
+      worth: '',
+      itemName: '',
+    });
+  };
+
   const handleSubmit = () => {
     const errors: Partial<Record<keyof IEventTransaction, string>> = {};
-    if (form.type === 'item') {
-      if (!form.itemName?.trim()) {
+    if (formValues.type === 'item') {
+      if (!formValues.itemName?.trim()) {
         errors.itemName = 'Item name is required';
       }
-      if (!form.worth?.trim()) {
+      if (!formValues.worth?.trim()) {
         errors.worth = 'Item value(worth) in amount(approx) is required';
       }
-      const worthNum = Number(form.worth);
+      const worthNum = Number(formValues.worth);
       if (isNaN(worthNum)) {
         errors.worth = 'Item value(worth) must be a number';
       } else if (worthNum <= 0) {
         errors.worth = 'Item value(worth) must be greater than 0';
       }
-      form.amount = '0';
+      formValues.amount = '0';
     }
 
-    if (!form.amount.trim()) {
+    if (!formValues.amount.trim()) {
       errors.amount = 'Amount is required';
-    } else if (form.type !== 'item') {
-      const amountNum = Number(form.amount);
+    } else if (formValues.type !== 'item') {
+      const amountNum = Number(formValues.amount);
       if (isNaN(amountNum)) {
         errors.amount = 'Amount must be a number';
       } else if (amountNum <= 0) {
@@ -176,24 +205,10 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
       return;
     }
 
-    console.log('Transaction submitted:', form);
-
-    // Reset form for next transaction
-    setFormErrors({});
-    setShowForm(false);
-    showToast('Transaction added successfully!', 'success');
-    // const newDate = new Date();
-    // setSelectedDate(newDate);
-    // setForm({
-    //   id: '',
-    //   amount: '',
-    //   type: 'incoming',
-    //   description: '',
-    //   date: formatDateTime(newDate),
-    //   eventId: id,
-    //   worth: '',
-    //   itemName: '',
-    // });
+    // Reset formValues for next transaction
+    const newId = generateId();
+    handleChange('id', newId);
+    onSubmit({ ...formValues, id: newId });
   };
 
   const getTransactionTypeColor = (type: string) => {
@@ -267,7 +282,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
             <Text
               style={[styles.text, { marginBottom: 10, fontWeight: 'bold' }]}
             >
-              Event: Test Event
+              Event: {formValues.eventId}
             </Text>
             {/* Transaction Type Selection */}
             <View style={styles.formComponentContainer}>
@@ -280,11 +295,11 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
                       styles.typeButton,
                       {
                         backgroundColor:
-                          form.type === type
+                          formValues.type === type
                             ? getTransactionTypeColor(type)
                             : DarkTheme.grey + '40', // semi-transparent grey
                         borderColor:
-                          form.type === type
+                          formValues.type === type
                             ? getTransactionTypeColor(type)
                             : DarkTheme.grey,
                       },
@@ -295,7 +310,9 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
                       name={getTransactionTypeIcon(type)}
                       size={20}
                       color={
-                        form.type === type ? DarkTheme.text : DarkTheme.grey
+                        formValues.type === type
+                          ? DarkTheme.text
+                          : DarkTheme.grey
                       }
                     />
                     <Text
@@ -303,10 +320,11 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
                         styles.typeButtonText,
                         {
                           color:
-                            form.type === type
+                            formValues.type === type
                               ? DarkTheme.text
                               : DarkTheme.grey,
-                          fontWeight: form.type === type ? 'bold' : 'normal',
+                          fontWeight:
+                            formValues.type === type ? 'bold' : 'normal',
                         },
                       ]}
                     >
@@ -318,14 +336,14 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
             </View>
 
             {/* Item Name (only for 'item' type) */}
-            {form.type === 'item' && (
+            {formValues.type === 'item' && (
               <View style={styles.formComponentContainer}>
                 <Text style={styles.label}>Item Name *</Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Enter item name"
                   placeholderTextColor={DarkTheme.grey}
-                  value={form.itemName}
+                  value={formValues.itemName}
                   onChangeText={val => handleChange('itemName', val)}
                   maxLength={100}
                 />
@@ -336,7 +354,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
             )}
 
             {/* Amount (only for non-item types) */}
-            {form.type !== 'item' && (
+            {formValues.type !== 'item' && (
               <View style={styles.formComponentContainer}>
                 <Text style={styles.label}>Amount *</Text>
                 <TextInput
@@ -344,7 +362,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
                   placeholder="Enter amount"
                   keyboardType="decimal-pad" // allows . on iOS & Android
                   placeholderTextColor={DarkTheme.grey}
-                  value={form.amount}
+                  value={formValues.amount}
                   onChangeText={val => {
                     // allow only numbers + dot
                     const cleaned = val.replace(/[^0-9.]/g, '');
@@ -356,7 +374,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
             )}
 
             {/* Worth (only for 'item' type) */}
-            {form.type === 'item' && (
+            {formValues.type === 'item' && (
               <View style={styles.formComponentContainer}>
                 <Text style={styles.label}>Worth *</Text>
                 <TextInput
@@ -364,7 +382,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
                   placeholder="Enter worth"
                   keyboardType="decimal-pad" // allows . on iOS & Android
                   placeholderTextColor={DarkTheme.grey}
-                  value={form.worth}
+                  value={formValues.worth}
                   onChangeText={val => {
                     // allow only numbers + dot
                     const cleaned = val.replace(/[^0-9.]/g, '');
@@ -417,11 +435,11 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
                 style={[styles.input, styles.textArea]}
                 placeholder="Enter description"
                 placeholderTextColor={DarkTheme.grey}
-                value={form.description}
+                value={formValues.description}
                 onChangeText={val =>
                   handleChange(
                     'description',
-                    val.length <= 1000 ? val : form.description,
+                    val.length <= 1000 ? val : formValues.description,
                   )
                 }
                 multiline
@@ -431,16 +449,6 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
               <Text style={styles.errorText}>
                 {formErrors.description ?? ' '}
               </Text>
-            </View>
-
-            {/* Event ID (Disabled) */}
-            <View style={styles.formComponentContainer}>
-              <Text style={styles.label}>Event ID</Text>
-              <TextInput
-                style={[styles.input, styles.disabledInput]}
-                value={form.eventId}
-                editable={false}
-              />
             </View>
 
             {/* Actions */}
