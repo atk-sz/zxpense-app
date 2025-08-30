@@ -33,6 +33,8 @@ export interface IExpenseEvent {
 export interface IEventTransaction {
   id: string;
   amount: string;
+  balanceAmountNow: string;
+  prevTransactionId: string;
   type: 'incoming' | 'outgoing' | 'item';
   description: string;
   date: string;
