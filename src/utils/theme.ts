@@ -9,6 +9,8 @@ type Theme = {
   error: string;
   success: string;
   orange: string;
+  darkGrey: string;
+  lightGrey: string;
 };
 export const DarkTheme: Theme = {
   primary: '#161616', // this is dark black
@@ -21,6 +23,8 @@ export const DarkTheme: Theme = {
   info: '#427CC3', // this is light blue
   success: '#4BB543', // this is green
   orange: '#FFA500',
+  darkGrey: '#2a2a2a',
+  lightGrey: '#888888',
 };
 
 export const LightTheme: Theme = {
@@ -34,4 +38,6 @@ export const LightTheme: Theme = {
   error: '#E52E2D', // this is red
   success: '#4BB543', // this is green
   orange: '#FFA500',
+  darkGrey: '#2a2a2a',
+  lightGrey: '#888888',
 };
