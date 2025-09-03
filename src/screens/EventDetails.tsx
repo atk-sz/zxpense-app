@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from '../contexts/ToastContext';
 import EventTransactionForm from '../components/forms/event-transaction-form.component';
+import { useSelector } from 'react-redux';
 
 type IEventDetailsScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'EventDetails'>;
@@ -19,16 +20,19 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
   const { id } = route.params;
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
+  const events = useSelector((state: any) => state.events);
   const [showForm, setShowForm] = useState(false);
 
   const handleTransactionSubmit = async (newTransaction: IEventTransaction) => {
     console.log('newTransaction', newTransaction);
     // dispatch(addEvent(newEvent));
-    // dispatch(saveOpenEvent(newEvent));
+    // dispatch(saveCurEvent(newEvent));
     // navigation.navigate('Home');
 
     showToast('Transaction added successfully!', 'success');
   };
+
+  console.log('events', events);
 
   return (
     <ScreenView>

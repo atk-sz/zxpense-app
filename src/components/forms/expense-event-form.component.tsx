@@ -13,7 +13,7 @@ import { IExpenseEvent, IRootStackParamList } from '../../utils/interfaces';
 import { useToast } from '../../contexts/ToastContext';
 import { useDispatch } from 'react-redux';
 import { addEvent } from '../../redux/slices/events';
-import { saveOpenEvent } from '../../redux/slices/event';
+import { saveCurEvent } from '../../redux/slices/event';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { generateId } from '../../utils/common.util';
@@ -51,7 +51,7 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
 
   const onSubmit = async (newEvent: IExpenseEvent) => {
     dispatch(addEvent(newEvent));
-    dispatch(saveOpenEvent(newEvent));
+    dispatch(saveCurEvent(newEvent));
     navigation.navigate('Home');
   };
 

@@ -14,15 +14,15 @@ const initialState: IExpenseEvent = {
   open: true,
 };
 
-const openEventSlice = createSlice({
-  name: 'openEvent',
+const curEventSlice = createSlice({
+  name: 'curEvent',
   initialState,
   reducers: {
-    saveOpenEvent: (state, action: PayloadAction<IExpenseEvent>) =>
+    saveCurEvent: (state, action: PayloadAction<IExpenseEvent>) =>
       action.payload,
-    clearOpenEvent: () => initialState,
+    clearCurEvent: () => initialState,
   },
 });
 
-export const { saveOpenEvent, clearOpenEvent } = openEventSlice.actions;
-export default openEventSlice.reducer;
+export const { saveCurEvent, clearCurEvent } = curEventSlice.actions;
+export default curEventSlice.reducer;
