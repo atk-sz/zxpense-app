@@ -16,6 +16,13 @@ export interface IToastContextType {
   showToast: (message: string, type?: IToastType) => void;
 }
 
+export type IUserState = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+};
+
 export interface IExpenseEvent {
   id: string;
   title: string;

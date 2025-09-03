@@ -159,24 +159,33 @@ const EventTransactionForm: React.FC<IEventTransactionFormProps> = ({
 
   const handleSubmit = () => {
     const errors: Partial<Record<keyof IEventTransaction, string>> = {};
-
+  
     if (formValues.type === 'item') {
-      if (!formValues.itemName?.trim()) {
+      formValues.itemName = formValues.itemName?.trim() || '';
+      formValues.worth = formValues.worth?.trim() || '';
+      if (!formValues.itemName) {
         errors.itemName = 'Item name is required';
       }
-      if (!formValues.worth?.trim()) {
+      if (formValues.itemName.length > 25) {
+        errors.itemName = 'Item name can be at most 25 characters long';
+      }
+      if (!formValues.worth) {
         errors.worth = 'Item value(worth) in amount(approx) is required';
       }
+      // formValues.worth must be a number & greater than 0 & less than 9999999999
       const worthNum = Number(formValues.worth);
       if (isNaN(worthNum)) {
         errors.worth = 'Item value(worth) must be a number';
       } else if (worthNum <= 0) {
         errors.worth = 'Item value(worth) must be greater than 0';
+      } else if (worthNum > 9999999999) {
+        errors.worth = 'Item value(worth) must be less than 9999999999';
       }
       formValues.amount = '0';
     }
 
-    if (!formValues.amount.trim()) {
+    formValues.amount = formValues.amount?.trim() || '';
+    if (!formValues.amount) {
       errors.amount = 'Amount is required';
     } else if (formValues.type !== 'item') {
       const amountNum = Number(formValues.amount);
@@ -184,6 +193,8 @@ const EventTransactionForm: React.FC<IEventTransactionFormProps> = ({
         errors.amount = 'Amount must be a number';
       } else if (amountNum <= 0) {
         errors.amount = 'Amount must be greater than 0';
+      } else if (amountNum > 9999999999) {
+        errors.amount = 'Amount must be less than 9999999999';
       }
     }
 

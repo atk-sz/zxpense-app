@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { IEventTransaction, IRootStackParamList } from '../utils/interfaces';
+import {
+  IEventTransaction,
+  IExpenseEvent,
+  IRootStackParamList,
+} from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DarkTheme } from '../utils/theme';
 import { ScreenView } from '../components';
@@ -20,7 +24,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
   const { id } = route.params;
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
-  const events = useSelector((state: any) => state.events);
+  const curEvent = useSelector((state: any) => state.curEvent) as IExpenseEvent;
   const [showForm, setShowForm] = useState(false);
 
   const handleTransactionSubmit = async (newTransaction: IEventTransaction) => {
@@ -32,13 +36,12 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
     showToast('Transaction added successfully!', 'success');
   };
 
-  console.log('events', events);
+  console.log('curEvent', curEvent);
 
   return (
     <ScreenView>
       <View style={styles.container}>
-        <Text style={styles.text}>Event Details</Text>
-        <Text style={styles.text}>Event ID: {id}</Text>
+        <Text style={styles.title}>{curEvent.title}</Text>
       </View>
 
       {/* Single Floating Add Button */}
@@ -73,12 +76,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: DarkTheme.primary,
     padding: 16,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 20,
+  title: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    textAlign: 'center',
     color: DarkTheme.text,
+    textTransform: 'uppercase',
   },
   fab: {
     position: 'absolute',

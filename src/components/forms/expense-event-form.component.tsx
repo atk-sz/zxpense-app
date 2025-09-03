@@ -11,7 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { DarkTheme } from '../../utils/theme';
 import { IExpenseEvent, IRootStackParamList } from '../../utils/interfaces';
 import { useToast } from '../../contexts/ToastContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addEvent } from '../../redux/slices/events';
 import { saveCurEvent } from '../../redux/slices/event';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -28,6 +28,7 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
   const [formErrors, setFormErrors] = useState<
     Partial<Record<keyof IExpenseEvent, string>>
   >({});
+  const events = useSelector((state: any) => state.events) as IExpenseEvent[];
 
   const [formValues, setFormValues] = useState<IExpenseEvent>({
     id: '',
@@ -47,27 +48,44 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
 
   const handleChange = (key: keyof IExpenseEvent, value: any) => {
     setFormValues(prev => ({ ...prev, [key]: value }));
+
+    if (formErrors[key]) {
+      setFormErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[key];
+        return newErrors;
+      });
+    }
   };
 
   const onSubmit = async (newEvent: IExpenseEvent) => {
     dispatch(addEvent(newEvent));
     dispatch(saveCurEvent(newEvent));
-    navigation.navigate('Home');
+    navigation.replace('EventDetails', { id: newEvent.id });
   };
 
   const handleSubmit = () => {
     const errors: Partial<Record<keyof IExpenseEvent, string>> = {};
-
-    if (!formValues.title.trim()) {
-      errors.title = 'Event title is required.';
+    formValues.title = formValues.title.trim();
+    if (!formValues.title) errors.title = 'Event title is required.';
+    if (formValues.title.length > 25)
+      errors.title = 'Event title can be at most 25 characters long.';
+    if (formValues.title) {
+      const existingEvent = events.find(
+        event => event.title === formValues.title,
+      );
+      if (existingEvent) errors.title = 'Event title already exists.';
     }
 
-    if (!formValues.startDate?.trim()) {
-      errors.startDate = 'Date is required.';
+    if (!formValues.startDate?.trim()) errors.startDate = 'Date is required.';
+    // Validate date & time
+    if (formValues.startDate) {
+      const date = new Date(formValues.startDate);
+      if (isNaN(date.getTime())) errors.startDate = 'Invalid date.';
     }
 
     if (Object.keys(errors).length > 0) {
-      showToast('Please fill all required fields.', 'error');
+      showToast('Please clear the following errors', 'error');
       setFormErrors(errors);
       return;
     }
@@ -89,6 +107,7 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
           placeholderTextColor={DarkTheme.grey}
           value={formValues.title}
           onChangeText={text => handleChange('title', text)}
+          maxLength={25}
         />
         <Text style={styles.errorText}>{formErrors.title ?? ' '}</Text>
       </View>

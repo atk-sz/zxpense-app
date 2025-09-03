@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { IRootStackParamList } from '../utils/interfaces';
+import { IRootStackParamList, IUserState } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { DarkTheme } from '../utils/theme';
@@ -24,20 +24,57 @@ const PreScreen: React.FC<IPreScreenProps> = ({
 }): React.JSX.Element => {
   const dispatch = useDispatch();
   const { showToast } = useToast();
-  const [name, setName] = useState({
+  const [formErrors, setFormErrors] = useState<
+    Partial<Record<keyof IUserState, string>>
+  >({});
+  const [formValues, setFormValues] = useState<IUserState>({
     firstName: '',
     lastName: '',
+    email: '',
+    password: '',
   });
 
+  const handleChange = (key: keyof IUserState, value: any) => {
+    setFormValues(prev => ({ ...prev, [key]: value }));
+
+    // Clear the error for this field when user starts typing
+    if (formErrors[key]) {
+      setFormErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[key];
+        return newErrors;
+      });
+    }
+  };
   const onSave = async (): Promise<void> => {
-    if (name.firstName.length < 3) {
-      showToast('First name must be at least 3 characters long.', 'error');
+    const errors: Partial<Record<keyof IUserState, string>> = {};
+
+    if (!formValues.firstName.trim()) {
+      formErrors.firstName = 'First name is required';
+      showToast('First name must be at least 3 characters long', 'error');
       return;
     }
+
+    if (formValues.firstName.length < 3)
+      errors.firstName = 'First name must be at least 3 characters long';
+    if (formValues.firstName.length > 25)
+      errors.firstName = 'First name can be at most 25 characters long';
+
+    if (formValues.lastName) {
+      if (formValues.lastName.length > 25)
+        errors.lastName = 'Last name can be at most 25 characters long';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      showToast('Please fix the following errors', 'error');
+      setFormErrors(errors);
+      return;
+    }
+
     dispatch(
       setValue({
-        firstName: name.firstName,
-        lastName: name.lastName || '',
+        firstName: formValues.firstName,
+        lastName: formValues.lastName || '',
       }),
     );
     navigation.replace('Dev');
@@ -55,18 +92,22 @@ const PreScreen: React.FC<IPreScreenProps> = ({
           <TextInput
             style={styles.input}
             placeholder="Enter your first name"
-            value={name.firstName}
-            onChangeText={value => setName({ ...name, firstName: value })}
+            value={formValues.firstName}
+            onChangeText={value => handleChange('firstName', value)}
+            maxLength={25}
           />
+          <Text style={styles.errorText}>{formErrors.firstName ?? ' '}</Text>
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>Last Name</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter your last name"
-            value={name.lastName}
-            onChangeText={value => setName({ ...name, lastName: value })}
+            value={formValues.lastName}
+            onChangeText={value => handleChange('lastName', value)}
+            maxLength={25}
           />
+          <Text style={styles.errorText}>{formErrors.lastName ?? ' '}</Text>
         </View>
         <TouchableOpacity style={styles.btn} onPress={onSave}>
           <Text style={{ color: DarkTheme.text }}>Submit</Text>
@@ -107,6 +148,11 @@ const styles = StyleSheet.create({
     height: 50,
     padding: 10,
     marginVertical: 10,
+  },
+  errorText: {
+    color: DarkTheme.error,
+    marginBottom: 8,
+    fontSize: 12,
   },
   btn: {
     height: 50,

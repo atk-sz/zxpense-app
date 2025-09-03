@@ -11,6 +11,8 @@ import { DarkTheme } from '../../utils/theme';
 import { IExpenseEvent, IRootStackParamList } from '../../utils/interfaces';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useDispatch } from 'react-redux';
+import { saveCurEvent } from '../../redux/slices/event';
 
 type IExpenseEventsListProps = {
   expenses: IExpenseEvent[];
@@ -19,11 +21,15 @@ type IExpenseEventsListProps = {
 const ExpenseEventsList: React.FC<IExpenseEventsListProps> = ({ expenses }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<IRootStackParamList>>();
+  const dispatch = useDispatch();
 
   const renderExpenseItem = ({ item }: { item: IExpenseEvent }) => (
     <TouchableOpacity
       style={styles.expenseItem}
       onPress={() => {
+        const foundEvent = expenses.find(e => e.id === item.id);
+        if (!foundEvent) return;
+        dispatch(saveCurEvent(foundEvent));
         navigation.navigate('EventDetails', { id: item.id });
       }}
     >

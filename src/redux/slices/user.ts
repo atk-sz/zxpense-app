@@ -1,11 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-type IUserState = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
+import { IUserState } from '../../utils/interfaces';
 
 const initialState: IUserState = {
   firstName: '',
