@@ -12,7 +12,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { DarkTheme } from '../utils/theme';
 import { ScreenView } from '../components';
 import { useToast } from '../contexts/ToastContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { setValue } from '../redux/slices/user';
 
@@ -35,8 +34,6 @@ const PreScreen: React.FC<IPreScreenProps> = ({
       showToast('First name must be at least 3 characters long.', 'error');
       return;
     }
-    await AsyncStorage.setItem('firstName', `${name.firstName}`);
-    await AsyncStorage.setItem('lastName', `${name.lastName}`);
     dispatch(
       setValue({
         firstName: name.firstName,

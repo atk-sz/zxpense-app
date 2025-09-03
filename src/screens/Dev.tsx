@@ -4,8 +4,8 @@ import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenView } from '../components';
 import { useLoader } from '../contexts/LoaderContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme } from '../utils/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type IDevScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Dev'>;
@@ -16,6 +16,25 @@ const DevScreen: React.FC<IDevScreenProps> = ({
 }): React.JSX.Element => {
   const { showLoader, hideLoader } = useLoader();
 
+  // to acces data from async storage
+  // const loadUser = async () => {
+  //   try {
+  //     const persistedState = await AsyncStorage.getItem('persist:root');
+  //     console.log('persistedState', persistedState);
+  //     if (persistedState) {
+  //       const parsedState = JSON.parse(persistedState);
+  //       console.log('parsedState', parsedState);
+
+  //       // user slice is stringified JSON, so parse it again
+  //       const userState = JSON.parse(parsedState.user);
+  //       console.log('userState', userState);
+  //       // setUser(userState)
+  //     }
+  //   } catch (err) {
+  //     console.error('Error loading user:', err);
+  //   }
+  // };
+
   const showLoaderFn = (): void => {
     showLoader('Brrr...');
     setTimeout(() => {
@@ -25,11 +44,10 @@ const DevScreen: React.FC<IDevScreenProps> = ({
 
   const removeData = async () => {
     try {
-      await AsyncStorage.removeItem('firstName');
-      await AsyncStorage.removeItem('lastName');
-      navigation.replace('PreScreen');
-    } catch (error) {
-      console.error('Error removing data:', error);
+      await AsyncStorage.clear();
+      console.log('AsyncStorage cleared!');
+    } catch (e) {
+      console.error('Failed to clear storage:', e);
     }
   };
 

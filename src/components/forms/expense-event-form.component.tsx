@@ -11,10 +11,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { DarkTheme } from '../../utils/theme';
 import { IExpenseEvent, IRootStackParamList } from '../../utils/interfaces';
 import { useToast } from '../../contexts/ToastContext';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addEvent } from '../../redux/slices/events';
 import { saveOpenEvent } from '../../redux/slices/event';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import { generateId } from '../../utils/common.util';
@@ -25,7 +24,6 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<IRootStackParamList>>();
   const dispatch = useDispatch();
-  const events = useSelector((state: any) => state.events);
   const { showToast } = useToast();
   const [formErrors, setFormErrors] = useState<
     Partial<Record<keyof IExpenseEvent, string>>
@@ -55,11 +53,6 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
   const onSubmit = async (newEvent: IExpenseEvent) => {
     dispatch(addEvent(newEvent));
     dispatch(saveOpenEvent(newEvent));
-    await AsyncStorage.setItem('openEvent', JSON.stringify(newEvent));
-    await AsyncStorage.setItem(
-      'eventsList',
-      JSON.stringify([...events, newEvent]),
-    );
     navigation.navigate('Home');
   };
 

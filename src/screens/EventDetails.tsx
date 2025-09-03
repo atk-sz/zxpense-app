@@ -25,11 +25,6 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
     console.log('newTransaction', newTransaction);
     // dispatch(addEvent(newEvent));
     // dispatch(saveOpenEvent(newEvent));
-    // await AsyncStorage.setItem('openEvent', JSON.stringify(newEvent));
-    // await AsyncStorage.setItem(
-    //   'eventsList',
-    //   JSON.stringify([...events, newEvent]),
-    // );
     // navigation.navigate('Home');
 
     showToast('Transaction added successfully!', 'success');
