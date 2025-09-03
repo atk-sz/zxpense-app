@@ -13,22 +13,43 @@ const LoaderComponent: React.FC<LoaderComponentProps> = () => {
     useNavigation<NativeStackNavigationProp<IRootStackParamList>>();
   // get values directly from Redux (rehydrated by redux-persist)
   const user = useSelector((state: any) => state.user);
+  //  const rehydrated = useSelector((state: any) => state._persist?.rehydrated);
 
   useEffect(() => {
-    if (user?.firstName && user.firstName.length > 0) {
-      // user exists → navigate to Dev
-      navigation.replace('Dev');
-      // navigation.replace('Home');
-    } else {
-      // no user → go to PreScreen
-      navigation.replace('PreScreen');
-    }
+    // Add a small delay to ensure Redux has rehydrated
+    const timer = setTimeout(() => {
+      if (user?.firstName && user.firstName.length > 0) {
+        // User exists → navigate to Dev/Home
+        navigation.replace('Dev');
+        // navigation.replace('Home');
+      } else {
+        // No user → go to PreScreen
+        navigation.replace('PreScreen');
+      }
+    }, 1000); // 1 second delay
+
+    return () => clearTimeout(timer);
   }, [user, navigation]);
+
+  // alternate method - very efficient
+  //   useEffect(() => {
+  //   if (!rehydrated) return; // wait for redux-persist if you use it
+
+  //   const task = InteractionManager.runAfterInteractions(() => {
+  //     if (user?.firstName && user.firstName.length > 0) {
+  //       navigation.replace('Dev');
+  //     } else {
+  //       navigation.replace('PreScreen');
+  //     }
+  //   });
+
+  //   return () => task.cancel();
+  // }, [rehydrated, user, navigation]);
 
   return (
     <View style={styles.container}>
       <ActivityIndicator size="large" color="#007AFF" />
-      <Text style={styles.text}>Loading...</Text>
+      <Text style={styles.text}>Flash Screen will come Loading...</Text>
     </View>
   );
 };

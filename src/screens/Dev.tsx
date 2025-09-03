@@ -46,6 +46,7 @@ const DevScreen: React.FC<IDevScreenProps> = ({
     try {
       await AsyncStorage.clear();
       console.log('AsyncStorage cleared!');
+      navigation.replace('PreScreen');
     } catch (e) {
       console.error('Failed to clear storage:', e);
     }
