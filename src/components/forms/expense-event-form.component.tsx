@@ -32,7 +32,6 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
   const [formValues, setFormValues] = useState<IExpenseEvent>({
     id: '',
     title: '',
-    type: 'personal',
     startDate: '',
     isMultiDay: false,
     balanceAmount: '0',
@@ -126,22 +125,6 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = () => {
           />
         )}
         <Text style={styles.errorText}>{formErrors.startDate ?? ' '}</Text>
-      </View>
-
-      {/* Group Toggle */}
-      <View style={styles.formComponentContainer}>
-        <View style={styles.switchContainer}>
-          <Text style={styles.label}>Group event?</Text>
-          <Switch
-            value={formValues.type === 'group'}
-            onValueChange={value =>
-              handleChange('type', value ? 'group' : 'personal')
-            }
-            thumbColor={DarkTheme.text}
-            trackColor={{ false: DarkTheme.grey, true: DarkTheme.secondary }}
-          />
-        </View>
-        <Text style={styles.errorText}>{formErrors.type ?? ' '}</Text>
       </View>
 
       {/* Multi-day Toggle */}

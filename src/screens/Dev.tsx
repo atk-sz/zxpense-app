@@ -72,7 +72,7 @@ const DevScreen: React.FC<IDevScreenProps> = ({
           <Text>Show Loading</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.btn} onPress={removeData}>
-          <Text>Remove Name</Text>
+          <Text>Remove Data</Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.btn} onPress={goToHome}>

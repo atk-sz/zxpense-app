@@ -6,7 +6,6 @@ const initialState: IExpenseEvent = {
   title: '',
   startDate: '',
   isMultiDay: false,
-  type: 'personal',
   balanceAmount: '0',
   incomingAmount: '0',
   outgoingAmount: '0',

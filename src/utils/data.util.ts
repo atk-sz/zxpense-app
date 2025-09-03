@@ -7,7 +7,6 @@ export const sampleEvents: IExpenseEvent[] = [
     startDate: '2025-02-10',
     endDate: '2025-02-12',
     isMultiDay: true,
-    type: 'group',
     balanceAmount: '7000', // incoming - outgoing
     incomingAmount: '20000',
     outgoingAmount: '13000',
@@ -83,7 +82,6 @@ export const sampleEvents: IExpenseEvent[] = [
     startDate: '2025-03-05',
     endDate: '2025-03-08',
     isMultiDay: true,
-    type: 'personal',
     balanceAmount: '2500',
     incomingAmount: '10000',
     outgoingAmount: '7500',

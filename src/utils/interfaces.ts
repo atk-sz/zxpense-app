@@ -21,7 +21,6 @@ export interface IExpenseEvent {
   title: string;
   startDate: string;
   isMultiDay: boolean;
-  type: 'personal' | 'group';
   balanceAmount: string;
   incomingAmount: string;
   outgoingAmount: string;
