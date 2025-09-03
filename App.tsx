@@ -10,7 +10,6 @@ import {
   CreateEventScreen,
   EventDetailsScreen,
 } from './src/screens';
-import { StatusBar } from 'react-native';
 import { ToastProvider } from './src/contexts/ToastContext';
 import { LoaderProvider } from './src/contexts/LoaderContext';
 import { LoadingComponent } from './src/components';
@@ -22,11 +21,6 @@ function App() {
 
   return (
     <LoaderProvider>
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle="dark-content" // or 'light-content' for white text
-      />
       <ToastProvider>
         <NavigationContainer>
           <Stack.Navigator
