@@ -9,6 +9,7 @@ import {
   ProfileScreen,
   CreateEventScreen,
   EventDetailsScreen,
+  TransactionDetailsScreen,
 } from './src/screens';
 import { ToastProvider } from './src/contexts/ToastContext';
 import { LoaderProvider } from './src/contexts/LoaderContext';
@@ -35,6 +36,10 @@ function App() {
             <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen
+              name="TransactionDetails"
+              component={TransactionDetailsScreen}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </ToastProvider>

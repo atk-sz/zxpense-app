@@ -6,3 +6,4 @@ export { default as ProfileScreen } from './Profile';
 export { default as LoginScreen } from './Login';
 export { default as CreateEventScreen } from './CreateEvent';
 export { default as EventDetailsScreen } from './EventDetails';
+export { default as TransactionDetailsScreen } from './TransactionDetails';

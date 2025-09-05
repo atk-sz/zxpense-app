@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addTransactionToCurEvent } from '../redux/slices/event';
 import { updateEvent } from '../redux/slices/events';
 import store from '../redux/store';
+import { saveCurTransaction } from '../redux/slices/transaction';
 
 type IEventDetailsScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'EventDetails'>;
@@ -181,7 +182,10 @@ const TransactionItem: React.FC<TransactionItemProps> = ({ item, onPress }) => {
   );
 };
 
-const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
+const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({
+  route,
+  navigation,
+}) => {
   const { id } = route.params;
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
@@ -204,13 +208,11 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({ route }) => {
   };
 
   const handleTransactionPress = (transaction: IEventTransaction) => {
-    console.log('transaction');
-    console.log(transaction);
-    // Navigate to transaction details screen
-    // navigation.navigate('TransactionDetails', {
-    //   transactionId: transaction.id,
-    //   eventId: id,
-    // });
+    dispatch(saveCurTransaction(transaction));
+    navigation.navigate('TransactionDetails', {
+      transactionId: transaction.id,
+      eventId: id,
+    });
   };
 
   const handleEventDetailsPress = () => {

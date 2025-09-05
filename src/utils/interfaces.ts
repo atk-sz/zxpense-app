@@ -8,6 +8,7 @@ export type IRootStackParamList = {
   Login: undefined;
   CreateEvent: undefined;
   EventDetails: { id: string };
+  TransactionDetails: { transactionId: string; eventId: string };
 };
 
 export type IToastType = 'success' | 'error' | 'info';

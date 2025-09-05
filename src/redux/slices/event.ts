@@ -65,9 +65,45 @@ const curEventSlice = createSlice({
       // Insert the new transaction at the correct position
       state.transactions.splice(insertIndex, 0, newTransaction);
     },
+    deleteTransactionFromCurEvent: (
+      state,
+      action: PayloadAction<string>, // transaction id to delete
+    ) => {
+      const transactionIdToDelete = action.payload;
+
+      // Find the index of the transaction to delete
+      const deleteIndex = state.transactions.findIndex(
+        transaction => transaction.id === transactionIdToDelete,
+      );
+
+      // If transaction not found, return early
+      if (deleteIndex === -1) {
+        return;
+      }
+
+      const transactionToDelete = state.transactions[deleteIndex];
+
+      // Find the transaction that comes after the one being deleted (if any)
+      const nextTransactionIndex = state.transactions.findIndex(
+        transaction => transaction.prevTransactionId === transactionIdToDelete,
+      );
+
+      // Update the next transaction's prevTransactionId to skip the deleted transaction
+      if (nextTransactionIndex !== -1) {
+        state.transactions[nextTransactionIndex].prevTransactionId =
+          transactionToDelete.prevTransactionId;
+      }
+
+      // Remove the transaction from the array
+      state.transactions.splice(deleteIndex, 1);
+    },
   },
 });
 
-export const { saveCurEvent, clearCurEvent, addTransactionToCurEvent } =
-  curEventSlice.actions;
+export const {
+  saveCurEvent,
+  clearCurEvent,
+  addTransactionToCurEvent,
+  deleteTransactionFromCurEvent,
+} = curEventSlice.actions;
 export default curEventSlice.reducer;

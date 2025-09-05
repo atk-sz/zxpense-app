@@ -53,7 +53,6 @@ const CreateEventScreen: React.FC<ICreateEventScreenProps> = ({
   };
 
   const onSubmit = async (newEvent: IExpenseEvent) => {
-    console.log('newEvent', newEvent);
     dispatch(addEvent(newEvent));
     dispatch(saveCurEvent(newEvent));
     navigation.replace('EventDetails', { id: newEvent.id });

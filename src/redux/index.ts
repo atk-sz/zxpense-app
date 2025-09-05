@@ -1,6 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import userReducer from './slices/user';
 import curEventReducer from './slices/event';
+import curTransactionReducer from './slices/transaction';
 import eventsReducer from './slices/events';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer } from 'redux-persist';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   user: userReducer,
   curEvent: curEventReducer,
   events: eventsReducer,
+  curTransaction: curTransactionReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
