@@ -87,7 +87,7 @@ const EventTransactionForm: React.FC<IEventTransactionFormProps> = ({
 
   const onDateChange = (event: DateTimePickerEvent, date?: Date) => {
     setShowDatePicker(Platform.OS === 'ios');
-    if (date) {
+    if (event.type === 'set' && date) {
       // Keep the same time, only update the date part
       const currentDateTime = new Date(selectedDate);
       const newDateTime = new Date(date);
@@ -110,7 +110,7 @@ const EventTransactionForm: React.FC<IEventTransactionFormProps> = ({
 
   const onTimeChange = (event: DateTimePickerEvent, time?: Date) => {
     setShowTimePicker(Platform.OS === 'ios');
-    if (time) {
+    if (event.type === 'set' && time) {
       // Keep the same date, only update the time part
       const newDateTime = new Date(selectedDate);
       newDateTime.setHours(time.getHours());
@@ -159,7 +159,7 @@ const EventTransactionForm: React.FC<IEventTransactionFormProps> = ({
 
   const handleSubmit = () => {
     const errors: Partial<Record<keyof IEventTransaction, string>> = {};
-  
+
     if (formValues.type === 'item') {
       formValues.itemName = formValues.itemName?.trim() || '';
       formValues.worth = formValues.worth?.trim() || '';
@@ -470,7 +470,6 @@ const EventTransactionForm: React.FC<IEventTransactionFormProps> = ({
           mode="time"
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           onChange={onTimeChange}
-          is24Hour={true}
         />
       )}
     </Modal>
