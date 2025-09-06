@@ -9,7 +9,6 @@ export const sampleTransactions: IEventTransaction[] = [
     date: '2025-02-10',
     eventId: 'wedding_4f9a7c2b',
     balanceAmountNow: '5000',
-    prevTransactionId: '',
   },
   {
     id: 'by92k3m',
@@ -19,7 +18,6 @@ export const sampleTransactions: IEventTransaction[] = [
     date: '2025-02-10',
     eventId: 'wedding_4f9a7c2b',
     balanceAmountNow: '12000',
-    prevTransactionId: 'ax008bu',
   },
   {
     id: 'lo8r2wx',
@@ -29,7 +27,6 @@ export const sampleTransactions: IEventTransaction[] = [
     date: '2025-02-11',
     eventId: 'wedding_4f9a7c2b',
     balanceAmountNow: '20000',
-    prevTransactionId: 'by92k3m',
   },
   {
     id: 'qp7t1gh',
@@ -39,7 +36,6 @@ export const sampleTransactions: IEventTransaction[] = [
     date: '2025-02-11',
     eventId: 'wedding_4f9a7c2b',
     balanceAmountNow: '10000',
-    prevTransactionId: 'lo8r2wx',
   },
   {
     id: 'mn6k8vz',
@@ -49,7 +45,6 @@ export const sampleTransactions: IEventTransaction[] = [
     date: '2025-02-12',
     eventId: 'wedding_4f9a7c2b',
     balanceAmountNow: '7000',
-    prevTransactionId: 'qp7t1gh',
   },
   {
     id: 'cd2h9tr',
@@ -61,7 +56,6 @@ export const sampleTransactions: IEventTransaction[] = [
     date: '2025-02-11',
     eventId: 'wedding_4f9a7c2b',
     balanceAmountNow: '7000',
-    prevTransactionId: 'mn6k8vz',
   },
 ];
 
@@ -70,7 +64,6 @@ export const sampleTransactions1: IEventTransaction[] = [
     id: '1',
     amount: '5000',
     balanceAmountNow: '15000',
-    prevTransactionId: '',
     type: 'incoming',
     description: '',
     date: '2024-01-15T10:30:00Z',
@@ -80,7 +73,6 @@ export const sampleTransactions1: IEventTransaction[] = [
     id: '2',
     amount: '2500',
     balanceAmountNow: '1250000',
-    prevTransactionId: '1',
     type: 'outgoing',
     description: 'Venue booking payment',
     date: '2024-01-16T14:20:00Z',
@@ -90,7 +82,6 @@ export const sampleTransactions1: IEventTransaction[] = [
     id: '3',
     amount: '0',
     balanceAmountNow: '12350',
-    prevTransactionId: '2',
     type: 'item',
     description: '',
     date: '2024-01-17T09:45:00Z',
@@ -102,7 +93,6 @@ export const sampleTransactions1: IEventTransaction[] = [
     id: '4',
     amount: '3000',
     balanceAmountNow: '15350',
-    prevTransactionId: '3',
     type: 'incoming',
     description: 'Sponsor payment',
     date: '2024-01-18T16:10:00Z',
@@ -112,7 +102,6 @@ export const sampleTransactions1: IEventTransaction[] = [
     id: '5',
     amount: '800',
     balanceAmountNow: '14550',
-    prevTransactionId: '4',
     type: 'outgoing',
     description: 'Catering advance',
     date: '2024-01-19T11:30:00Z',
@@ -152,7 +141,6 @@ export const sampleEvents: IExpenseEvent[] = [
         date: '2025-03-04',
         eventId: 'trip_9a0b6x3q',
         balanceAmountNow: '4000',
-        prevTransactionId: '',
       },
       {
         id: 'we89opq',
@@ -162,7 +150,6 @@ export const sampleEvents: IExpenseEvent[] = [
         date: '2025-03-05',
         eventId: 'trip_9a0b6x3q',
         balanceAmountNow: '10000',
-        prevTransactionId: 'rt67ujk',
       },
       {
         id: 'vb45tkl',
@@ -172,7 +159,6 @@ export const sampleEvents: IExpenseEvent[] = [
         date: '2025-03-05',
         eventId: 'trip_9a0b6x3q',
         balanceAmountNow: '7500',
-        prevTransactionId: 'we89opq',
       },
       {
         id: 'zx91mno',
@@ -182,7 +168,6 @@ export const sampleEvents: IExpenseEvent[] = [
         date: '2025-03-06',
         eventId: 'trip_9a0b6x3q',
         balanceAmountNow: '4500',
-        prevTransactionId: 'vb45tkl',
       },
       {
         id: 'gh34plm',
@@ -192,7 +177,6 @@ export const sampleEvents: IExpenseEvent[] = [
         date: '2025-03-07',
         eventId: 'trip_9a0b6x3q',
         balanceAmountNow: '2500',
-        prevTransactionId: 'zx91mno',
       },
       {
         id: 'ab12def',
@@ -204,7 +188,6 @@ export const sampleEvents: IExpenseEvent[] = [
         date: '2025-03-07',
         eventId: 'trip_9a0b6x3q',
         balanceAmountNow: '2500',
-        prevTransactionId: 'gh34plm',
       },
     ],
   },

@@ -5,7 +5,6 @@ const initialState: IEventTransaction = {
   id: '',
   amount: '',
   balanceAmountNow: '',
-  prevTransactionId: '',
   type: 'incoming',
   description: '',
   date: '',
