@@ -16,6 +16,7 @@ type IExpenseEventFormProps = {
   showEndDatePicker: boolean;
   formValues: IExpenseEvent;
   formErrors: Partial<Record<keyof IExpenseEvent, string>>;
+  isEditMode?: boolean; // New prop to determine if we're in edit mode
   setShowStartDatePicker: (value: boolean) => void;
   setShowEndDatePicker: (value: boolean) => void;
   handleChange: (key: keyof IExpenseEvent, value: any) => void;
@@ -27,6 +28,7 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = ({
   showEndDatePicker,
   formValues,
   formErrors,
+  isEditMode = false, // Default to create mode
   setShowEndDatePicker,
   setShowStartDatePicker,
   handleChange,
@@ -131,9 +133,11 @@ const ExpenseEventForm: React.FC<IExpenseEventFormProps> = ({
         </View>
       )}
 
-      {/* Submit */}
+      {/* Submit Button - Dynamic text based on mode */}
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Create Event</Text>
+        <Text style={styles.submitButtonText}>
+          {isEditMode ? 'Update Event' : 'Create Event'}
+        </Text>
       </TouchableOpacity>
     </View>
   );

@@ -6,7 +6,12 @@ export type IRootStackParamList = {
   Home: undefined;
   Profile: undefined;
   Login: undefined;
-  CreateEvent: undefined;
+  CreateEvent:
+    | undefined
+    | {
+        eventId: string;
+        isEditMode: boolean;
+      };
   EventDetails: { id: string };
   TransactionDetails: { transactionId: string; eventId: string };
 };

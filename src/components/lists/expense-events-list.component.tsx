@@ -17,6 +17,8 @@ import ConfirmationModal from '../model/confirmationModel.component';
 import useConfirmationModal from '../../hooks/useConfirmationModel';
 import { useToast } from '../../contexts/ToastContext';
 import { ExpenseItem } from '..';
+import { deleteEvent } from '../../redux/slices/events';
+import { useLoader } from '../../contexts/LoaderContext';
 
 type IExpenseEventsListProps = {
   expenses: IExpenseEvent[];
@@ -27,6 +29,7 @@ const ExpenseEventsList: React.FC<IExpenseEventsListProps> = ({ expenses }) => {
     useNavigation<NativeStackNavigationProp<IRootStackParamList>>();
   const dispatch = useDispatch();
   const { showToast } = useToast();
+  const { showLoader, hideLoader } = useLoader();
 
   const {
     isVisible,
@@ -38,7 +41,6 @@ const ExpenseEventsList: React.FC<IExpenseEventsListProps> = ({ expenses }) => {
   } = useConfirmationModal();
 
   const handleDeleteEvent = (eventId: string) => {
-    console.log('Deleting event with ID:', eventId);
     showModal({
       title: 'Delete Event',
       message:
@@ -49,33 +51,16 @@ const ExpenseEventsList: React.FC<IExpenseEventsListProps> = ({ expenses }) => {
       iconColor: DarkTheme.error,
       confirmButtonColor: DarkTheme.error,
       onConfirm: () => {
-        console.log('Event deleted successfully!');
-        // Remove transaction from current event
-        // dispatch(deleteTransactionFromCurEvent(transactionId));
-        // // reset curTransaction state
-        // dispatch(clearCurTransaction());
-
-        // // update the list of events with newly updated event with new transactions & balances
-        // const updatedCurEvent = store.getState().curEvent;
-        // dispatch(
-        //   updateEvent({
-        //     id: eventId,
-        //     updates: {
-        //       transactions: updatedCurEvent.transactions,
-        //       balanceAmount: updatedCurEvent.balanceAmount,
-        //       incomingAmount: updatedCurEvent.incomingAmount,
-        //       outgoingAmount: updatedCurEvent.outgoingAmount,
-        //     },
-        //   }),
-        // );
-
+        showLoader('Deleting event...');
+        dispatch(deleteEvent(eventId));
+        hideLoader();
         showToast('Event deleted successfully!', 'success');
       },
     });
   };
 
-  const handleEditEvent = (event: IExpenseEvent) => {
-    console.log('Editing event:', event);
+  const handleEditEvent = (eventId: string) => {
+    navigation.navigate('CreateEvent', { isEditMode: true, eventId });
   };
 
   const onEventPress = (item: IExpenseEvent) => {

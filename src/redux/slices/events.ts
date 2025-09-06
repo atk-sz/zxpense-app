@@ -15,7 +15,7 @@ const eventsSlice = createSlice({
     addEvent: (state, action: PayloadAction<IExpenseEvent>) => {
       state.push(action.payload);
     },
-    removeEvent: (state, action: PayloadAction<string>) => {
+    deleteEvent: (state, action: PayloadAction<string>) => {
       return state.filter(event => event.id !== action.payload);
     },
     updateEvent: (
@@ -38,7 +38,7 @@ export const {
   initializeEvents,
   clearAllEvents,
   addEvent,
-  removeEvent,
+  deleteEvent,
   updateEvent,
 } = eventsSlice.actions;
 export default eventsSlice.reducer;

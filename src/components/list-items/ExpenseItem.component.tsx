@@ -6,7 +6,7 @@ import { DarkTheme } from '../../utils/theme';
 interface IExpenseItemProps {
   item: IExpenseEvent;
   onEventPress: (event: IExpenseEvent) => void;
-  handleEditEvent: (event: IExpenseEvent) => void;
+  handleEditEvent: (eventId: string) => void;
   handleDeleteEvent: (eventId: string) => void;
 }
 
@@ -31,7 +31,7 @@ const ExpenseItemComponent: React.FC<IExpenseItemProps> = ({
         <View style={styles.actionButtons}>
           <TouchableOpacity
             style={styles.actionBtn}
-            onPress={() => handleEditEvent(item)}
+            onPress={() => handleEditEvent(item.id)}
           >
             <Icon name="pencil" size={20} color={DarkTheme.text} />
           </TouchableOpacity>
