@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  Animated,
-  Modal,
 } from 'react-native';
 import { IEventTransaction, IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -21,6 +19,16 @@ import { updateEvent } from '../redux/slices/events';
 import store from '../redux/store';
 import { deleteTransactionFromCurEvent } from '../redux/slices/event';
 import { clearCurTransaction } from '../redux/slices/transaction';
+import {
+  formatAmount,
+  formatDateLong,
+  formatTime,
+  getTypeColor,
+  getTypeIcon,
+  getTypeLabel,
+} from '../utils/common.util';
+import useConfirmationModal from '../hooks/useConfirmationModel';
+import ConfirmationModal from '../components/model/confirmationModel.component';
 
 type ITransactionDetailsScreenProps = {
   navigation: NativeStackNavigationProp<
@@ -28,69 +36,6 @@ type ITransactionDetailsScreenProps = {
     'TransactionDetails'
   >;
   route: RouteProp<IRootStackParamList, 'TransactionDetails'>;
-};
-
-// Helper functions
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
-
-const formatTime = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  });
-};
-
-const formatAmount = (amount: string) => {
-  return parseFloat(amount).toLocaleString();
-};
-
-const getTypeColor = (type: string) => {
-  switch (type) {
-    case 'incoming':
-      return DarkTheme.success;
-    case 'outgoing':
-      return DarkTheme.error;
-    case 'item':
-      return DarkTheme.orange;
-    default:
-      return DarkTheme.text;
-  }
-};
-
-const getTypeIcon = (type: string) => {
-  switch (type) {
-    case 'incoming':
-      return 'cash-plus';
-    case 'outgoing':
-      return 'cash-minus';
-    case 'item':
-      return 'package-variant';
-    default:
-      return 'circle';
-  }
-};
-
-const getTypeLabel = (type: string) => {
-  switch (type) {
-    case 'incoming':
-      return 'Income';
-    case 'outgoing':
-      return 'Expense';
-    case 'item':
-      return 'Item Transaction';
-    default:
-      return 'Transaction';
-  }
 };
 
 const TransactionDetailsScreen: React.FC<ITransactionDetailsScreenProps> = ({
@@ -104,8 +49,15 @@ const TransactionDetailsScreen: React.FC<ITransactionDetailsScreenProps> = ({
     (state: any) => state.curTransaction,
   ) as IEventTransaction;
   const dispatch = useDispatch();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteAnimation] = useState(new Animated.Value(0));
+
+  const {
+    isVisible,
+    config,
+    animation,
+    showModal,
+    handleConfirm,
+    handleCancel,
+  } = useConfirmationModal();
 
   if (!curTransaction || curTransaction.id !== transactionId) {
     return (
@@ -125,43 +77,39 @@ const TransactionDetailsScreen: React.FC<ITransactionDetailsScreenProps> = ({
   }
 
   const handleDeletePress = () => {
-    setShowDeleteModal(true);
-    Animated.spring(deleteAnimation, {
-      toValue: 1,
-      useNativeDriver: true,
-      tension: 300,
-      friction: 8,
-    }).start();
-  };
+    showModal({
+      title: 'Delete Transaction',
+      message:
+        'Are you sure you want to delete this transaction? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      iconName: 'alert-circle',
+      iconColor: DarkTheme.error,
+      confirmButtonColor: DarkTheme.error,
+      onConfirm: () => {
+        // Remove transaction from current event
+        dispatch(deleteTransactionFromCurEvent(transactionId));
+        // reset curTransaction state
+        dispatch(clearCurTransaction());
 
-  const handleDeleteConfirm = () => {
-    // Remove transaction from current event
-    dispatch(deleteTransactionFromCurEvent(transactionId));
-    // reset curTransaction state
-    dispatch(clearCurTransaction());
+        // update the list of events with newly updated event with new transactions & balances
+        const updatedCurEvent = store.getState().curEvent;
+        dispatch(
+          updateEvent({
+            id: eventId,
+            updates: {
+              transactions: updatedCurEvent.transactions,
+              balanceAmount: updatedCurEvent.balanceAmount,
+              incomingAmount: updatedCurEvent.incomingAmount,
+              outgoingAmount: updatedCurEvent.outgoingAmount,
+            },
+          }),
+        );
 
-    // update the list of events with newly updated event with new transactions & balances
-    const updatedCurEvent = store.getState().curEvent;
-    dispatch(
-      updateEvent({
-        id: eventId,
-        updates: {
-          transactions: updatedCurEvent.transactions,
-          balanceAmount: updatedCurEvent.balanceAmount,
-          incomingAmount: updatedCurEvent.incomingAmount,
-          outgoingAmount: updatedCurEvent.outgoingAmount,
-        },
-      }),
-    );
-
-    showToast('Transaction deleted successfully!', 'success');
-    navigation.goBack();
-  };
-
-  const handleDeleteCancel = () => {
-    setShowDeleteModal(false);
-    // Reset animation state for next time
-    deleteAnimation.setValue(0);
+        showToast('Transaction deleted successfully!', 'success');
+        navigation.goBack();
+      },
+    });
   };
 
   return (
@@ -225,7 +173,7 @@ const TransactionDetailsScreen: React.FC<ITransactionDetailsScreenProps> = ({
               <Text style={styles.cardTitle}>Date & Time</Text>
             </View>
             <Text style={styles.cardValue}>
-              {formatDate(curTransaction.date)}
+              {formatDateLong(curTransaction.date)}
             </Text>
             <Text style={styles.cardSubValue}>
               {formatTime(curTransaction.date)}
@@ -314,58 +262,14 @@ const TransactionDetailsScreen: React.FC<ITransactionDetailsScreenProps> = ({
         <Icon name="delete" size={32} color={DarkTheme.text} />
       </TouchableOpacity>
 
-      {/* Delete Confirmation Modal */}
-      <Modal
-        visible={showDeleteModal}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={handleDeleteCancel}
-      >
-        <View style={styles.modalOverlay}>
-          <Animated.View
-            style={[
-              styles.modalContent,
-              {
-                transform: [
-                  {
-                    scale: deleteAnimation.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [0.7, 1],
-                    }),
-                  },
-                ],
-                opacity: deleteAnimation,
-              },
-            ]}
-          >
-            <View style={styles.modalHeader}>
-              <Icon name="alert-circle" size={48} color={DarkTheme.error} />
-              <Text style={styles.modalTitle}>Delete Transaction</Text>
-            </View>
-
-            <Text style={styles.modalMessage}>
-              Are you sure you want to delete this transaction? This action
-              cannot be undone.
-            </Text>
-
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.cancelButton]}
-                onPress={handleDeleteCancel}
-              >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.modalButton, styles.deleteButton]}
-                onPress={handleDeleteConfirm}
-              >
-                <Text style={styles.deleteButtonText}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-        </View>
-      </Modal>
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isVisible={isVisible}
+        config={config}
+        animation={animation}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
     </ScreenView>
   );
 };
@@ -533,71 +437,5 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: DarkTheme.text,
     fontWeight: '600',
-  },
-  // Modal Styles
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalContent: {
-    backgroundColor: DarkTheme.darkGrey,
-    borderRadius: 20,
-    padding: 24,
-    width: '100%',
-    maxWidth: 340,
-    elevation: 10,
-    shadowColor: DarkTheme.dark,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-  },
-  modalHeader: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: DarkTheme.text,
-    marginTop: 12,
-  },
-  modalMessage: {
-    fontSize: 16,
-    color: DarkTheme.lightGrey,
-    textAlign: 'center',
-    lineHeight: 24,
-    marginBottom: 28,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  modalButton: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: DarkTheme.lightGrey + '30',
-    borderWidth: 1,
-    borderColor: DarkTheme.lightGrey + '50',
-  },
-  deleteButton: {
-    backgroundColor: DarkTheme.error,
-  },
-  cancelButtonText: {
-    color: DarkTheme.text,
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  deleteButtonText: {
-    color: DarkTheme.text,
-    fontWeight: '600',
-    fontSize: 16,
   },
 });
