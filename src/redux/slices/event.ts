@@ -14,59 +14,98 @@ const initialState: IExpenseEvent = {
   open: true,
 };
 
+// 🔹 Utility: Recalculate overall totals
+const recalcTotals = (state: IExpenseEvent) => {
+  const incoming = state.transactions
+    .filter(t => t.type === 'incoming')
+    .reduce((sum, t) => sum + parseFloat(t.amount.toString()), 0);
+
+  const outgoing = state.transactions
+    .filter(t => t.type === 'outgoing')
+    .reduce((sum, t) => sum + parseFloat(t.amount.toString()), 0);
+
+  state.incomingAmount = incoming.toString();
+  state.outgoingAmount = outgoing.toString();
+  state.balanceAmount = (incoming - outgoing).toString();
+};
+
+// 🔹 Utility: Recalculate balanceAmountNow for all transactions
+const recalcRunningBalances = (state: IExpenseEvent) => {
+  let runningBalance = 0;
+
+  state.transactions.forEach(t => {
+    const amt = parseFloat(t.amount.toString());
+
+    if (t.type === 'incoming') {
+      runningBalance += amt;
+    } else {
+      runningBalance -= amt;
+    }
+
+    t.balanceAmountNow = runningBalance.toString();
+  });
+};
+
+// 🔹 Utility: Find correct insert index by date
+const findInsertIndex = (
+  transactions: IEventTransaction[],
+  newDate: Date,
+): number => {
+  let index = 0;
+  for (let i = 0; i < transactions.length; i++) {
+    if (newDate >= new Date(transactions[i].date)) {
+      index = i + 1;
+    } else {
+      break;
+    }
+  }
+  return index;
+};
+
 const curEventSlice = createSlice({
   name: 'curEvent',
   initialState,
   reducers: {
-    saveCurEvent: (state, action: PayloadAction<IExpenseEvent>) =>
-      action.payload,
+    saveCurEvent: (_, action: PayloadAction<IExpenseEvent>) => action.payload,
     clearCurEvent: () => initialState,
-    // add new transaction to current event, check for the date-time of the new transaction & then place it in sorted order based on date-time
-    addTransactionToCurEvent: (
-      state,
-      action: PayloadAction<IEventTransaction>,
-    ) => {
+
+    addTransactionToCurEvent: (state, action: PayloadAction<IEventTransaction>) => {
       const newTransaction = { ...action.payload };
       const newTransactionDate = new Date(newTransaction.date);
 
-      // If no transactions exist, this is the first one
-      if (state.transactions.length === 0) {
-        state.transactions.push(newTransaction);
-        return;
-      }
+      // Find correct insert index
+      const insertIndex = findInsertIndex(state.transactions, newTransactionDate);
 
-      // Find the correct position to insert the new transaction
-      let insertIndex = 0;
-      for (let i = 0; i < state.transactions.length; i++) {
-        const currentTransactionDate = new Date(state.transactions[i].date);
-
-        if (newTransactionDate >= currentTransactionDate) {
-          insertIndex = i + 1;
-        } else {
-          break;
-        }
-      }
-
-      // Insert the new transaction at the correct position
+      // Insert at calculated index
       state.transactions.splice(insertIndex, 0, newTransaction);
+
+      // Recalculate everything
+      recalcTotals(state);
+      recalcRunningBalances(state);
     },
-    deleteTransactionFromCurEvent: (
+
+    deleteTransactionFromCurEvent: (state, action: PayloadAction<string>) => {
+      const idx = state.transactions.findIndex(t => t.id === action.payload);
+      if (idx === -1) return;
+
+      state.transactions.splice(idx, 1);
+
+      recalcTotals(state);
+      recalcRunningBalances(state);
+    },
+
+    updateTransactionInCurEvent: (
       state,
-      action: PayloadAction<string>, // transaction id to delete
+      action: PayloadAction<{ id: string; updatedTransaction: Partial<IEventTransaction> }>,
     ) => {
-      const transactionIdToDelete = action.payload;
+      const { id, updatedTransaction } = action.payload;
+      const idx = state.transactions.findIndex(t => t.id === id);
+      if (idx === -1) return;
 
-      // Find the index of the transaction to delete
-      const deleteIndex = state.transactions.findIndex(
-        transaction => transaction.id === transactionIdToDelete,
-      );
+      Object.assign(state.transactions[idx], updatedTransaction);
 
-      // If transaction not found, return early
-      if (deleteIndex === -1) {
-        return;
-      }
-
-      state.transactions.splice(deleteIndex, 1);
+      recalcTotals(state);
+      recalcRunningBalances(state);
     },
   },
 });
@@ -76,5 +115,7 @@ export const {
   clearCurEvent,
   addTransactionToCurEvent,
   deleteTransactionFromCurEvent,
+  updateTransactionInCurEvent,
 } = curEventSlice.actions;
+
 export default curEventSlice.reducer;

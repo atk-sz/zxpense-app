@@ -140,12 +140,17 @@ const TransactionDetailsScreen: React.FC<ITransactionDetailsScreenProps> = ({
     // reset curTransaction state
     dispatch(clearCurTransaction());
 
-    // Update the events list
-    const updatedTransactions = store.getState().curEvent.transactions;
+    // update the list of events with newly updated event with new transactions & balances
+    const updatedCurEvent = store.getState().curEvent;
     dispatch(
       updateEvent({
         id: eventId,
-        updates: { transactions: updatedTransactions },
+        updates: {
+          transactions: updatedCurEvent.transactions,
+          balanceAmount: updatedCurEvent.balanceAmount,
+          incomingAmount: updatedCurEvent.incomingAmount,
+          outgoingAmount: updatedCurEvent.outgoingAmount,
+        },
       }),
     );
 

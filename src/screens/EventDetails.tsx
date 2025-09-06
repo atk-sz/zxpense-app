@@ -195,12 +195,17 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({
 
   const handleTransactionSubmit = async (newTransaction: IEventTransaction) => {
     dispatch(addTransactionToCurEvent(newTransaction));
-    // update the list of events with newly updated event with new transaction
-    const updatedTransaction = store.getState().curEvent.transactions;
+    // update the list of events with newly updated event with new transactions & balances
+    const updatedCurEvent = store.getState().curEvent;
     dispatch(
       updateEvent({
         id: curEvent.id,
-        updates: { transactions: updatedTransaction },
+        updates: {
+          transactions: updatedCurEvent.transactions,
+          balanceAmount: updatedCurEvent.balanceAmount,
+          incomingAmount: updatedCurEvent.incomingAmount,
+          outgoingAmount: updatedCurEvent.outgoingAmount,
+        },
       }),
     );
     setShowForm(false);
@@ -232,12 +237,14 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({
         <View style={styles.row}>
           <View style={styles.card}>
             <Text style={styles.cardLabel}>Income</Text>
-            <Text style={[styles.cardValue, styles.incomeText]}>200004567</Text>
+            <Text style={[styles.cardValue, styles.incomeText]}>
+              {formatAmount(curEvent.incomingAmount)}
+            </Text>
           </View>
           <View style={styles.card}>
             <Text style={styles.cardLabel}>Expense</Text>
             <Text style={[styles.cardValue, styles.expenseText]}>
-              899296547
+              {formatAmount(curEvent.outgoingAmount)}
             </Text>
           </View>
         </View>
@@ -246,7 +253,7 @@ const EventDetailsScreen: React.FC<IEventDetailsScreenProps> = ({
           <View style={[styles.card, styles.balanceCard]}>
             <Text style={styles.cardLabel}>Balance</Text>
             <Text style={[styles.cardValue, styles.balanceText]}>
-              7299287647658
+              {formatAmount(curEvent.balanceAmount)}
             </Text>
           </View>
         </View>
