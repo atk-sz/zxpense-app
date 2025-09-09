@@ -33,13 +33,13 @@ rmdir /s /q %USERPROFILE%\.gradle\caches
 5.2 if it does't work still then run below command & then above commands (5) (very critical/danger command & '1>nul' use to hide naming of each file)
 del /f /s /q  %USERPROFILE%\.gradle
 del /f /s /q  %USERPROFILE%\AppData\Temp
-rm -rf node_modules
-rm -rf android/.gradle
-rm -rf android/app/.cxx
-rm -rf android/build
-rm -rf android/app/build
-rm -rf ios/build
-rm yarn.lock package-lock.json
+rmdir /s /q node_modules
+rmdir /s /q android\.gradle
+rmdir /s /q android\app\.cxx
+rmdir /s /q android\build
+rmdir /s /q android\app\build
+rmdir /s /q ios\build
+del /f /q yarn.lock package-lock.json
 npm cache clean --force
 
 npm install

@@ -3,9 +3,10 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { IRootStackParamList } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenView } from '../components';
-import { useLoader } from '../contexts/LoaderContext';
+import { useLoader } from '../contexts/loader.context';
 import { DarkTheme } from '../utils/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDrawer } from '../contexts/drawer.context';
 
 type IDevScreenProps = {
   navigation: NativeStackNavigationProp<IRootStackParamList, 'Dev'>;
@@ -15,7 +16,7 @@ const DevScreen: React.FC<IDevScreenProps> = ({
   navigation,
 }): React.JSX.Element => {
   const { showLoader, hideLoader } = useLoader();
-
+  const { toggleDrawer } = useDrawer();
   // to acces data from async storage
   // const loadUser = async () => {
   //   try {
@@ -57,7 +58,8 @@ const DevScreen: React.FC<IDevScreenProps> = ({
   };
 
   const goToLogin = (): void => {
-    navigation.navigate('Login');
+    toggleDrawer();
+    // navigation.navigate('Login');
   };
 
   const goToProfile = (): void => {

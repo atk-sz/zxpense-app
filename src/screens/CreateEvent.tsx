@@ -5,8 +5,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DarkTheme } from '../utils/theme';
 import { ExpenseEventForm, ScreenView } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
-import { useToast } from '../contexts/ToastContext';
-import { addEvent, updateEvent } from '../redux/slices/events'; // Assuming updateEvent action exists
+import { useToast } from '../contexts/toast.context';
+import { addEvent, updateEvent } from '../redux/slices/events';
 import { saveCurEvent } from '../redux/slices/event';
 import { generateId } from '../utils/common.util';
 import { RouteProp } from '@react-navigation/native';

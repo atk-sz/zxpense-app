@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { IRootStackParamList, IUserState } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { ScreenView, UserForm } from '../components';
-import { useToast } from '../contexts/ToastContext';
+import { useToast } from '../contexts/toast.context';
 import { useDispatch } from 'react-redux';
 import { setValue } from '../redux/slices/user';
 

@@ -7,3 +7,5 @@ export { default as ExpenseEventForm } from './forms/expense-event-form.componen
 export { default as UserForm } from './forms/user-form.component';
 export { default as TransactionItem } from './list-items/TransactionItem.component';
 export { default as ExpenseItem } from './list-items/ExpenseItem.component';
+export { default as CustomDrawer } from './navs/drawer.component';
+export { default as EventTransactionForm } from './forms/event-transaction-form.component';

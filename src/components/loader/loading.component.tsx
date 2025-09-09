@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
-import { useLoader } from '../../contexts/LoaderContext';
+import { useLoader } from '../../contexts/loader.context';
 import { DarkTheme } from '../../utils/theme';
 
 const LoadingComponent: React.FC = () => {

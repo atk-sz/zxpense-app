@@ -13,7 +13,7 @@ import { ScreenView } from '../components';
 import { RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useToast } from '../contexts/ToastContext';
+import { useToast } from '../contexts/toast.context';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEvent } from '../redux/slices/events';
 import store from '../redux/store';

@@ -13,12 +13,15 @@ import {
 } from '../utils/interfaces';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DarkTheme } from '../utils/theme';
-import { ScreenView, TransactionItem } from '../components';
+import {
+  EventTransactionForm,
+  ScreenView,
+  TransactionItem,
+} from '../components';
 import { RouteProp } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useToast } from '../contexts/ToastContext';
-import EventTransactionForm from '../components/forms/event-transaction-form.component';
+import { useToast } from '../contexts/toast.context';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTransactionToCurEvent } from '../redux/slices/event';
 import { updateEvent } from '../redux/slices/events';

@@ -15,10 +15,10 @@ import { useDispatch } from 'react-redux';
 import { saveCurEvent } from '../../redux/slices/event';
 import ConfirmationModal from '../model/confirmationModel.component';
 import useConfirmationModal from '../../hooks/useConfirmationModel';
-import { useToast } from '../../contexts/ToastContext';
+import { useToast } from '../../contexts/toast.context';
 import { ExpenseItem } from '..';
 import { deleteEvent } from '../../redux/slices/events';
-import { useLoader } from '../../contexts/LoaderContext';
+import { useLoader } from '../../contexts/loader.context';
 
 type IExpenseEventsListProps = {
   expenses: IExpenseEvent[];
